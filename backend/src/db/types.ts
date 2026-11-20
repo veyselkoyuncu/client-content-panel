@@ -1,7 +1,8 @@
 import type { ColumnType, Generated, Insertable, Selectable, Updateable } from 'kysely';
+import type { ContentStatus, ContentType } from '../modules/contents/content.constants.js';
 
-type CreatedAt = ColumnType<Date, never, never>;
-type UpdatedAt = ColumnType<Date, never, never>;
+type CreatedAt = ColumnType<Date, Date | undefined, never>;
+type UpdatedAt = ColumnType<Date, Date | undefined, never>;
 
 export interface UsersTable {
   id: Generated<string>;
@@ -10,6 +11,14 @@ export interface UsersTable {
   passwordHash: string;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
+}
+
+export interface SessionsTable {
+  id: Generated<string>;
+  userId: string;
+  tokenHash: string;
+  expiresAt: Date;
+  createdAt: CreatedAt;
 }
 
 export interface ClientsTable {
@@ -29,15 +38,17 @@ export interface ContentsTable {
   id: Generated<string>;
   clientId: string;
   title: string;
-  type: string;
-  status: Generated<string>;
+  type: ContentType;
+  status: ColumnType<ContentStatus, ContentStatus | undefined, ContentStatus>;
   body: string | null;
+  dueDate: string | null;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
 }
 
 export interface Database {
   users: UsersTable;
+  sessions: SessionsTable;
   clients: ClientsTable;
   contents: ContentsTable;
 }

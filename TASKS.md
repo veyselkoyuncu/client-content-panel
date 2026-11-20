@@ -7,9 +7,9 @@
 - [x] Docker Compose: db, migration job, API
 
 ## 2. Backend API
-- [ ] Auth: password hashing, login, logout, current user, session cookie, route guard
-- [ ] Seed: admin user and demo clients/contents
-- [ ] Clients: list, create, detail with content stats, update, delete (only without content)
+- [x] Auth: password hashing, login, logout, current user, session cookie, route guard
+- [x] Seed: admin user and demo clients/contents
+- [x] Clients: list, create, detail with content stats, update, delete (only without content)
 - [ ] Contents: list with status/client/type filters, create, detail, update, status update, delete
 - [ ] Dashboard summary
 - [ ] API tests for CRUD, relations, filters and dashboard numbers

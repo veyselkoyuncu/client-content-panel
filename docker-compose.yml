@@ -21,10 +21,13 @@ services:
   migrate:
     build: ./backend
     command: ["node", "dist/db/migrate.js"]
-    environment: &api-env
-      NODE_ENV: production
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      CORS_ORIGIN: ${CORS_ORIGIN:?}
+    environment:
+      <<: &api-env
+        NODE_ENV: production
+        DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+        CORS_ORIGIN: ${CORS_ORIGIN:?}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
     depends_on:
       db:
         condition: service_healthy
