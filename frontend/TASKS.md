@@ -12,8 +12,8 @@
 - [x] Content board grouped by status with status change menu
 - [x] Content list view with status tabs and filters
 - [x] Content create/edit panel
-- [ ] Clients: list with search, detail with stats and contents
-- [ ] Client create/edit panel
+- [x] Clients: list with search, detail with stats and contents
+- [x] Client create/edit panel
 
 ## Quality
 - [ ] Loading, empty and error states on every screen

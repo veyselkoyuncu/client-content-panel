@@ -19,7 +19,15 @@ export class ApiError extends Error {
   }
 }
 
-type Method = "GET" | "POST" | "PATCH" | "DELETE";
+export function mergeErrors(apiError: ApiError | undefined, local: Record<string, string>) {
+  const merged = { ...apiError?.fieldErrors() };
+  for (const [field, message] of Object.entries(local)) {
+    if (message) merged[field] = message;
+  }
+  return merged;
+}
+
+type Method ="GET" | "POST" | "PATCH" | "DELETE";
 
 async function request<T>(method: Method, path: string, body?: unknown): Promise<T> {
   let response: Response;

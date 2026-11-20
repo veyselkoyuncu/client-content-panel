@@ -9,7 +9,7 @@ import { EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
 import { StatusDot } from "@/components/ui/status-badge";
 import { TypeIcon } from "@/components/ui/type-icon";
 import { useClients } from "@/features/clients/api";
-import { ApiError } from "@/lib/api";
+import { ApiError, mergeErrors } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import { CONTENT_STATUSES, CONTENT_TYPES, type ContentStatus, STATUS_LABELS, TYPE_LABELS } from "@/lib/labels";
 import { type ContentInput, useContent, useSaveContent } from "./api";
@@ -37,7 +37,7 @@ function ContentFormBody({ initial, contentId, onSaved, onSavingChange }: FormBo
   const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
 
   const apiError = save.error instanceof ApiError ? save.error : undefined;
-  const errors = { ...apiError?.fieldErrors(), ...localErrors };
+  const errors = mergeErrors(apiError, localErrors);
   const formError = apiError && apiError.details.length === 0 ? apiError.message : undefined;
 
   const update = <K extends keyof ContentInput>(key: K, value: ContentInput[K]) => {

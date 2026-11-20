@@ -1,9 +1,19 @@
 "use client";
 
 import { X } from "lucide-react";
-import { type ReactNode, useEffect, useId, useRef } from "react";
+import { type ReactNode, useEffect, useId, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/cn";
+
+const noopSubscribe = () => () => {};
+
+function useIsClient() {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 function useOverlayBehavior(open: boolean, onClose: () => void, containerRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
@@ -37,8 +47,9 @@ interface OverlayProps {
 export function Drawer({ open, onClose, title, eyebrow, children, footer }: OverlayProps) {
   const ref = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  const isClient = useIsClient();
   useOverlayBehavior(open, onClose, ref);
-  if (!open) return null;
+  if (!open || !isClient) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -72,8 +83,9 @@ export function Drawer({ open, onClose, title, eyebrow, children, footer }: Over
 export function Dialog({ open, onClose, title, children, footer }: OverlayProps) {
   const ref = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  const isClient = useIsClient();
   useOverlayBehavior(open, onClose, ref);
-  if (!open) return null;
+  if (!open || !isClient) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
