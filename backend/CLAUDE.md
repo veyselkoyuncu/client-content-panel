@@ -16,6 +16,7 @@ npm run dev               # API with reload on :4000
 npm run db:migrate
 npm run db:seed
 npm run typecheck
+npm test                  # API tests against a recreated panel_test database
 ```
 
 ## Structure

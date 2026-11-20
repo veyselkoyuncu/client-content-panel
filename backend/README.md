@@ -27,6 +27,16 @@ npm run db:seed
 npm run dev   # http://localhost:4000
 ```
 
+## Tests
+
+API tests run the real app (`fastify.inject`) against a separate PostgreSQL database that is recreated and migrated on each run. With the Compose database running:
+
+```bash
+npm test
+```
+
+They cover authentication, client and content CRUD, the client–content relation, validation errors, filters, overdue rules and dashboard numbers. Override the database with `TEST_DATABASE_URL`.
+
 ## Architecture
 
 ```

@@ -11,7 +11,7 @@
 - [x] Clients: list, create, detail with content stats, update, delete (only without content)
 - [x] Contents: list with status/client/type filters, create, detail, update, status update, delete
 - [x] Dashboard summary
-- [ ] API tests for CRUD, relations, filters and dashboard numbers
+- [x] API tests for CRUD, relations, filters and dashboard numbers
 
 ## Deployment
 - [ ] Compose stack on the VM, Caddy site for `panel-api.lazyantlab.com`
