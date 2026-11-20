@@ -28,11 +28,11 @@ function NavLinks({ className }: { className?: string }) {
             href={href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex h-9 flex-1 items-center justify-center gap-2 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors",
+              "flex h-9 flex-1 items-center justify-center gap-2 rounded-full px-2.5 text-[13px] font-semibold whitespace-nowrap transition-colors sm:px-4 sm:text-sm",
               active ? "bg-surface text-ink shadow-sm" : "text-muted hover:text-ink",
             )}
           >
-            <Icon className="size-4" />
+            <Icon className="hidden size-4 sm:block" />
             {label}
           </Link>
         );

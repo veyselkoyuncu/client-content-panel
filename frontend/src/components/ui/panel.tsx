@@ -2,7 +2,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 export function Panel({ className, ...props }: ComponentProps<"section">) {
-  return <section className={cn("rounded-panel border border-line-soft bg-surface p-5 sm:p-6", className)} {...props} />;
+  return <section className={cn("min-w-0 rounded-panel border border-line-soft bg-surface p-5 sm:p-6", className)} {...props} />;
 }
 
 export function PanelHeader({ title, action }: { title: ReactNode; action?: ReactNode }) {

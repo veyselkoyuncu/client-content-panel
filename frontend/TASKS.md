@@ -8,7 +8,7 @@
 - [x] App shell: top navigation, user menu, sign out
 
 ## Screens
-- [ ] Overview: greeting, status summary cards, items needing attention, client distribution
+- [x] Overview: greeting, status summary cards, items needing attention, client distribution
 - [ ] Content board grouped by status with status change menu
 - [ ] Content list view with status tabs and filters
 - [ ] Content create/edit panel
