@@ -1,12 +1,12 @@
-# Content Panel API
+# Client & Content Tracking Panel — API
 
-REST API for the client and content tracking panel.
+Müşteri ve içerik takip panelinin REST API'si.
 
-**Stack:** Node.js 24, Fastify 5, TypeScript, Kysely, PostgreSQL 16, Zod, Docker
+**Teknolojiler:** Node.js 24, Fastify 5, TypeScript, Kysely, PostgreSQL 16, Zod, Vitest, Docker
 
-## Run locally
+## Lokalde çalıştırma
 
-Requires Docker.
+Yalnızca Docker gerekir.
 
 ```bash
 cp .env.example .env
@@ -15,9 +15,9 @@ docker compose run --rm migrate node dist/db/seed.js
 curl http://127.0.0.1:3002/api/health
 ```
 
-Demo user: `demo@panel.local` / `change-me-please`
+Demo kullanıcı: `demo@panel.local` / `change-me-please`
 
-For development with reload, start only the database and run the API with Node.js 22+:
+Kod değişikliklerinde otomatik yeniden başlatma ile geliştirmek için yalnızca veritabanını başlatıp API'yi Node.js 22+ ile çalıştırın:
 
 ```bash
 docker compose up -d db
@@ -27,69 +27,70 @@ npm run db:seed
 npm run dev   # http://localhost:4000
 ```
 
-## Tests
+## Testler
 
-API tests run the real app (`fastify.inject`) against a separate PostgreSQL database that is recreated and migrated on each run. With the Compose database running:
+API testleri uygulamayı gerçek haliyle (`fastify.inject`) çalıştırır ve her seferinde sıfırdan oluşturulup migrate edilen ayrı bir PostgreSQL veritabanı kullanır. Compose veritabanı çalışırken:
 
 ```bash
 npm test
 ```
 
-They cover authentication, client and content CRUD, the client–content relation, validation errors, filters, overdue rules and dashboard numbers. Override the database with `TEST_DATABASE_URL`.
+Kapsam: kimlik doğrulama, müşteri ve içerik CRUD işlemleri, müşteri–içerik ilişkisi, validasyon hataları, filtreler, gecikme kuralı ve dashboard sayıları. Test veritabanı `TEST_DATABASE_URL` ile değiştirilebilir.
 
-## Architecture
+## Mimari
 
 ```
 src/
-  config/        environment validation (the app does not start with invalid config)
-  db/            connection, table types, migrations, seed
+  config/        ortam değişkenlerinin doğrulanması (geçersiz ayarla uygulama başlamaz)
+  db/            bağlantı, tablo tipleri, migration'lar, seed
   modules/       auth, clients, contents, dashboard, health
-                 routes (HTTP) → service (business rules) → repository (queries)
-  shared/        error types, central error handler, validation helpers
+                 routes (HTTP) → service (iş kuralları) → repository (sorgular)
+  shared/        hata tipleri, merkezi hata yakalayıcı, validasyon yardımcıları
 ```
 
-- Validation with Zod on every request; the database enforces the same rules with `NOT NULL`, `CHECK`, foreign keys and unique indexes.
-- A single error format: `{ "error": { "code", "message", "details": [{ "field", "message" }] } }`.
-- Aggregates (content counts per client and per status) are computed in SQL, not in application code.
-- Turkish-aware case-insensitive search, sorting and unique client names (ICU `tr` collation).
+- Her istek Zod ile doğrulanır. Veritabanı aynı kuralları `NOT NULL`, `CHECK`, foreign key ve unique index'lerle ayrıca korur.
+- Tek bir hata formatı: `{ "error": { "code", "message", "details": [{ "field", "message" }] } }`.
+- Müşteri ve durum bazlı içerik sayıları uygulama kodunda değil, SQL'de hesaplanır.
+- Arama, sıralama ve müşteri adı benzersizliği Türkçe büyük/küçük harf kurallarına göre çalışır (ICU `tr` collation).
+- "Gecikti" bilgisi veritabanında, Europe/Istanbul saatine göre hesaplanır.
 
-## Data model
+## Veri modeli
 
-| Table | Purpose |
+| Tablo | Amaç |
 |---|---|
-| `users` | Account managers who sign in |
-| `sessions` | Active sessions; stores a SHA-256 hash of the cookie token |
-| `clients` | Brands the agency works with |
-| `contents` | Content items; each belongs to one client (`ON DELETE RESTRICT`) |
+| `users` | Panele giriş yapan hesap yöneticileri |
+| `sessions` | Aktif oturumlar; cookie token'ının yalnızca SHA-256 hash'i saklanır |
+| `clients` | Ajansın çalıştığı markalar |
+| `contents` | İçerikler; her biri tek bir müşteriye bağlıdır (`ON DELETE RESTRICT`) |
 
-Content `type`: `social_post`, `blog_post`, `web_page`, `other`
-Content `status`: `draft`, `in_review`, `published`
+İçerik `type`: `social_post`, `blog_post`, `web_page`, `other`
+İçerik `status`: `draft`, `in_review`, `published`
 
-## Endpoints
+## Endpoint'ler
 
-All endpoints except health and login require the session cookie.
+Health ve login dışındaki tüm endpoint'ler oturum cookie'si gerektirir.
 
-| Method | Path | Description |
+| Metot | Adres | Açıklama |
 |---|---|---|
-| GET | `/api/health` | Service and database status |
-| POST | `/api/auth/login` | Sign in, sets the session cookie |
-| POST | `/api/auth/logout` | Sign out |
-| GET | `/api/auth/me` | Current user |
-| GET | `/api/clients?q=` | Clients with content counts per status |
-| POST | `/api/clients` | Create a client |
-| GET | `/api/clients/:id` | Client detail with content counts |
-| PATCH | `/api/clients/:id` | Update a client |
-| DELETE | `/api/clients/:id` | Delete a client without content |
-| GET | `/api/contents?status=&clientId=&type=&q=&sort=` | Contents with client; `meta.statusCounts` holds per-status counts for the other filters |
-| POST | `/api/contents` | Create a content item (starts as `draft` unless a status is given) |
-| GET | `/api/contents/:id` | Content detail |
-| PATCH | `/api/contents/:id` | Update a content item |
-| PATCH | `/api/contents/:id/status` | Change only the status |
-| DELETE | `/api/contents/:id` | Delete a content item |
-| GET | `/api/dashboard/summary` | Totals, counts per status, overdue count, latest items per status, items needing attention |
+| GET | `/api/health` | Servis ve veritabanı durumu |
+| POST | `/api/auth/login` | Giriş, oturum cookie'sini oluşturur |
+| POST | `/api/auth/logout` | Çıkış |
+| GET | `/api/auth/me` | Oturumdaki kullanıcı |
+| GET | `/api/clients?q=` | Durum bazlı içerik sayılarıyla müşteriler |
+| POST | `/api/clients` | Müşteri oluşturma |
+| GET | `/api/clients/:id` | İçerik sayılarıyla müşteri detayı |
+| PATCH | `/api/clients/:id` | Müşteri güncelleme |
+| DELETE | `/api/clients/:id` | İçeriği olmayan müşteriyi silme |
+| GET | `/api/contents?status=&clientId=&type=&q=&sort=` | Müşteri bilgisiyle içerikler; `meta.statusCounts` diğer filtrelere göre durum sayılarını verir |
+| POST | `/api/contents` | İçerik oluşturma (durum verilmezse `draft`) |
+| GET | `/api/contents/:id` | İçerik detayı |
+| PATCH | `/api/contents/:id` | İçerik güncelleme |
+| PATCH | `/api/contents/:id/status` | Yalnızca durum güncelleme |
+| DELETE | `/api/contents/:id` | İçerik silme |
+| GET | `/api/dashboard/summary` | Toplamlar, durum sayıları, geciken içerik sayısı, her durumdaki son içerikler, ilgilenilmesi gereken içerikler |
 
-`sort` accepts `-updatedAt` (default), `dueDate`, `-createdAt`, `title`. Each content response includes `isOverdue`, computed in the database against the current date in Europe/Istanbul.
+`sort` değerleri: `-updatedAt` (varsayılan), `dueDate`, `-createdAt`, `title`.
 
-## Environment
+## Ortam değişkenleri
 
-See [`.env.example`](.env.example). `DATABASE_URL`, `PORT` and `CORS_ORIGIN` are used by the API; `POSTGRES_*`, `DB_PORT` and `API_PORT` by Docker Compose; `SEED_*` by the seed script.
+Bkz. [`.env.example`](.env.example). `DATABASE_URL`, `PORT` ve `CORS_ORIGIN` API tarafından; `POSTGRES_*`, `DB_PORT` ve `API_PORT` Docker Compose tarafından; `SEED_*` seed script'i tarafından kullanılır.

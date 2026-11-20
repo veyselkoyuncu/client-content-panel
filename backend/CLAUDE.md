@@ -1,4 +1,4 @@
-# Content Panel API
+# Client & Content Tracking Panel — API
 
 REST API for the content tracking panel: session auth, clients, contents and dashboard summary. Fastify, TypeScript, Kysely, PostgreSQL. Runs independently of the frontend.
 

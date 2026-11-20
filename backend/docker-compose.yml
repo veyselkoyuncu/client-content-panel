@@ -1,4 +1,4 @@
-name: content-panel
+name: client-content-panel
 
 services:
   db:
