@@ -2,10 +2,10 @@
 
 ## Foundation
 - [x] Next.js app with TypeScript, Tailwind CSS and ESLint
-- [ ] Design tokens and UI primitives
-- [ ] API client, same-origin API proxy, query provider
-- [ ] Session guard and login screen
-- [ ] App shell: top navigation, user menu, sign out
+- [x] Design tokens and UI primitives
+- [x] API client, same-origin API proxy, query provider
+- [x] Session guard and login screen
+- [x] App shell: top navigation, user menu, sign out
 
 ## Screens
 - [ ] Overview: greeting, status summary cards, items needing attention, client distribution
