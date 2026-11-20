@@ -9,9 +9,9 @@
 
 ## Screens
 - [x] Overview: greeting, status summary cards, items needing attention, client distribution
-- [ ] Content board grouped by status with status change menu
-- [ ] Content list view with status tabs and filters
-- [ ] Content create/edit panel
+- [x] Content board grouped by status with status change menu
+- [x] Content list view with status tabs and filters
+- [x] Content create/edit panel
 - [ ] Clients: list with search, detail with stats and contents
 - [ ] Client create/edit panel
 

@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/layout/page-header";
+import { Suspense } from "react";
+import { ContentsView } from "@/features/contents/contents-view";
 
 export const metadata: Metadata = { title: "İçerik panosu" };
 
 export default function ContentsPage() {
-  return <PageHeader title="İçerik panosu" />;
+  return (
+    <Suspense>
+      <ContentsView />
+    </Suspense>
+  );
 }
