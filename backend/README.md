@@ -2,6 +2,8 @@
 
 Müşteri ve içerik takip panelinin REST API'si.
 
+**Canlı:** https://panel-api.lazyantlab.com/api/health
+
 **Teknolojiler:** Node.js 24, Fastify 5, TypeScript, Kysely, PostgreSQL 16, Zod, Vitest, Docker
 
 ## Lokalde çalıştırma

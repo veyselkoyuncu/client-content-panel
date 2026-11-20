@@ -14,6 +14,6 @@
 - [x] API tests for CRUD, relations, filters and dashboard numbers
 
 ## Deployment
-- [ ] Compose stack on the VM, Caddy site for `panel-api.lazyantlab.com`
-- [ ] Migration and seed on the server, health check over HTTPS
+- [x] Compose stack on the VM, Caddy site for `panel-api.lazyantlab.com`
+- [x] Migration and seed on the server, health check over HTTPS
 - [ ] CORS origin for the deployed frontend
