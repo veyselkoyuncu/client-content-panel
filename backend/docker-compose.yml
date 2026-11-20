@@ -19,7 +19,7 @@ services:
       retries: 10
 
   migrate:
-    build: ./backend
+    build: .
     command: ["node", "dist/db/migrate.js"]
     environment:
       <<: &api-env
@@ -33,7 +33,7 @@ services:
         condition: service_healthy
 
   api:
-    build: ./backend
+    build: .
     restart: unless-stopped
     environment: *api-env
     ports:
