@@ -6,6 +6,8 @@ import type { DB } from './db/database.js';
 import { requireAuth } from './modules/auth/auth.guard.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { clientRoutes } from './modules/clients/client.routes.js';
+import { contentRoutes } from './modules/contents/content.routes.js';
+import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { healthRoutes } from './modules/health/health.routes.js';
 import { registerErrorHandling } from './shared/error-handler.js';
 
@@ -55,6 +57,8 @@ export async function buildApp({ env, db, logger = true }: AppDependencies) {
       await api.register(async (protectedApi) => {
         protectedApi.addHook('preHandler', requireAuth);
         await protectedApi.register(clientRoutes);
+        await protectedApi.register(contentRoutes);
+        await protectedApi.register(dashboardRoutes);
       });
     },
     { prefix: '/api' },

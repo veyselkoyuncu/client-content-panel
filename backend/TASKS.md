@@ -9,8 +9,8 @@
 - [x] Auth: password hashing, login, logout, current user, session cookie, route guard
 - [x] Seed: demo user, clients and contents
 - [x] Clients: list, create, detail with content stats, update, delete (only without content)
-- [ ] Contents: list with status/client/type filters, create, detail, update, status update, delete
-- [ ] Dashboard summary
+- [x] Contents: list with status/client/type filters, create, detail, update, status update, delete
+- [x] Dashboard summary
 - [ ] API tests for CRUD, relations, filters and dashboard numbers
 
 ## Deployment

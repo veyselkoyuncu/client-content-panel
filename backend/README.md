@@ -70,6 +70,15 @@ All endpoints except health and login require the session cookie.
 | GET | `/api/clients/:id` | Client detail with content counts |
 | PATCH | `/api/clients/:id` | Update a client |
 | DELETE | `/api/clients/:id` | Delete a client without content |
+| GET | `/api/contents?status=&clientId=&type=&q=&sort=` | Contents with client; `meta.statusCounts` holds per-status counts for the other filters |
+| POST | `/api/contents` | Create a content item (starts as `draft` unless a status is given) |
+| GET | `/api/contents/:id` | Content detail |
+| PATCH | `/api/contents/:id` | Update a content item |
+| PATCH | `/api/contents/:id/status` | Change only the status |
+| DELETE | `/api/contents/:id` | Delete a content item |
+| GET | `/api/dashboard/summary` | Totals, counts per status, overdue count, latest items per status, items needing attention |
+
+`sort` accepts `-updatedAt` (default), `dueDate`, `-createdAt`, `title`. Each content response includes `isOverdue`, computed in the database against the current date in Europe/Istanbul.
 
 ## Environment
 

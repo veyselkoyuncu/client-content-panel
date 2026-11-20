@@ -1,6 +1,7 @@
-import { type ExpressionBuilder, sql } from 'kysely';
+import type { ExpressionBuilder } from 'kysely';
 import type { DB } from '../../db/database.js';
 import type { ClientUpdate, Database, NewClient } from '../../db/types.js';
+import { containsText, turkishOrder } from '../../shared/sql.js';
 import type { ContentStatus } from '../contents/content.constants.js';
 
 type Builder = ExpressionBuilder<Database & { c: Database['contents'] }, 'clients' | 'c'>;
@@ -24,13 +25,8 @@ function selectWithStats(db: DB) {
 }
 
 export function list(db: DB, search?: string) {
-  let query = selectWithStats(db).orderBy(sql`clients.name COLLATE "tr-x-icu"`);
-  if (search) {
-    query = query.where(
-      sql<boolean>`lower(clients.name COLLATE "tr-x-icu") LIKE '%' || lower(${search} COLLATE "tr-x-icu") || '%'`,
-    );
-  }
-  return query.execute();
+  const query = selectWithStats(db).orderBy(turkishOrder('clients.name'));
+  return (search ? query.where(containsText('clients.name', search)) : query).execute();
 }
 
 export function findById(db: DB, id: string) {
