@@ -8,6 +8,7 @@ import { TypeBadge } from "@/components/ui/type-icon";
 import { cn } from "@/lib/cn";
 import { formatDueDate } from "@/lib/format";
 import { CONTENT_STATUSES, type ContentStatus, STATUS_LABELS, STATUS_STYLES } from "@/lib/labels";
+import { INITIAL_STATUSES } from "@/lib/transitions";
 import { ContentLink } from "./content-link";
 import { ContentMenu } from "./content-menu";
 import type { Content } from "./types";
@@ -107,14 +108,16 @@ function BoardColumn({
           {remaining} içerik daha
         </button>
       )}
-      <button
-        type="button"
-        onClick={() => onCreate(status)}
-        className="flex h-11 items-center justify-center gap-2 rounded-card border border-dashed border-ink/15 text-[13px] font-semibold text-muted hover:bg-surface/60 hover:text-ink"
-      >
-        <Plus className="size-4" />
-        {STATUS_LABELS[status]} ekle
-      </button>
+      {INITIAL_STATUSES.includes(status) && (
+        <button
+          type="button"
+          onClick={() => onCreate(status)}
+          className="flex h-11 items-center justify-center gap-2 rounded-card border border-dashed border-ink/15 text-[13px] font-semibold text-muted hover:bg-surface/60 hover:text-ink"
+        >
+          <Plus className="size-4" />
+          {STATUS_LABELS[status]} ekle
+        </button>
+      )}
     </section>
   );
 }

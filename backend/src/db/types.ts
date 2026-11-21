@@ -47,11 +47,21 @@ export interface ContentsTable {
   updatedAt: UpdatedAt;
 }
 
+export interface ContentStatusEventsTable {
+  id: Generated<string>;
+  contentId: string;
+  fromStatus: ContentStatus | null;
+  toStatus: ContentStatus;
+  userId: string | null;
+  createdAt: ColumnType<Date, Date | undefined, never>;
+}
+
 export interface Database {
   users: UsersTable;
   sessions: SessionsTable;
   clients: ClientsTable;
   contents: ContentsTable;
+  contentStatusEvents: ContentStatusEventsTable;
 }
 
 export type User = Selectable<UsersTable>;

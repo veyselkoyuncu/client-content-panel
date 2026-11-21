@@ -20,7 +20,7 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
 
   app.post('/contents', async (request, reply) => {
     const input = parseInput(createContentSchema, request.body);
-    return reply.status(201).send({ data: await contentService.createContent(app.db, input) });
+    return reply.status(201).send({ data: await contentService.createContent(app.db, input, request.user!.id) });
   });
 
   app.get('/contents/:id', async (request) => {
@@ -31,13 +31,18 @@ export const contentRoutes: FastifyPluginAsync = async (app) => {
   app.patch('/contents/:id', async (request) => {
     const id = parseIdParam(request.params, NOT_FOUND);
     const input = parseInput(updateContentSchema, request.body);
-    return { data: await contentService.updateContent(app.db, id, input) };
+    return { data: await contentService.updateContent(app.db, id, input, request.user!.id) };
   });
 
   app.patch('/contents/:id/status', async (request) => {
     const id = parseIdParam(request.params, NOT_FOUND);
     const { status } = parseInput(updateStatusSchema, request.body);
-    return { data: await contentService.updateContentStatus(app.db, id, status) };
+    return { data: await contentService.updateContentStatus(app.db, id, status, request.user!.id) };
+  });
+
+  app.post('/contents/:id/unpublish', async (request) => {
+    const id = parseIdParam(request.params, NOT_FOUND);
+    return { data: await contentService.unpublishContent(app.db, id, request.user!.id) };
   });
 
   app.delete('/contents/:id', async (request, reply) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Columns3, Home, LogOut, PanelLeftClose, PanelLeftOpen, Plus, Users } from "lucide-react";
+import { Columns3, History, Home, LogOut, PanelLeftClose, PanelLeftOpen, Plus, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Özet", icon: Home },
   { href: "/contents", label: "İçerik panosu", icon: Columns3 },
   { href: "/clients", label: "Müşteriler", icon: Users },
+  { href: "/activity", label: "Hareketler", icon: History },
 ];
 
 const CLIENT_SHORTCUTS = 5;

@@ -31,7 +31,32 @@ export function formatDueDate(dueDate: string) {
   if (dueDate === addDays(today, 1)) return "Yarın";
   return formatShortDate(dueDate);
 }
-export const formatLongDate = (value: string | Date) => longDate.format(toDate(value));
+const relative = new Intl.RelativeTimeFormat("tr-TR", { numeric: "auto" });
+const dateTime = new Intl.DateTimeFormat("tr-TR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "Europe/Istanbul",
+});
+
+export function formatRelative(value: string | Date) {
+  const seconds = Math.round((new Date(value).getTime() - Date.now()) / 1000);
+  const units: Array<[Intl.RelativeTimeFormatUnit, number]> = [
+    ["day", 86_400],
+    ["hour", 3_600],
+    ["minute", 60],
+  ];
+  for (const [unit, size] of units) {
+    if (Math.abs(seconds) >= size) return relative.format(Math.round(seconds / size), unit);
+  }
+  return "az önce";
+}
+
+export const formatDateTime = (value: string | Date) => dateTime.format(new Date(value));
+
+export const formatLongDate =(value: string | Date) => longDate.format(toDate(value));
 export const formatToday = () => weekdayDate.format(new Date());
 
 export function initials(name: string) {

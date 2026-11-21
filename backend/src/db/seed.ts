@@ -1,3 +1,4 @@
+import { sql } from 'kysely';
 import { z } from 'zod';
 import { loadEnv } from '../config/env.js';
 import { hashPassword } from '../modules/auth/password.js';
@@ -85,14 +86,15 @@ async function main() {
     await trx.deleteFrom('sessions').execute();
     await trx.deleteFrom('users').execute();
 
-    await trx
+    const admin = await trx
       .insertInto('users')
       .values({
         email: seedEnv.SEED_ADMIN_EMAIL,
         name: seedEnv.SEED_ADMIN_NAME,
         passwordHash: await hashPassword(seedEnv.SEED_ADMIN_PASSWORD),
       })
-      .execute();
+      .returning('id')
+      .executeTakeFirstOrThrow();
 
     const clientIds = new Map<ClientKey, string>();
     for (const [index, { key, ...client }] of clients.entries()) {
@@ -120,6 +122,16 @@ async function main() {
         })),
       )
       .execute();
+
+    await sql`
+      INSERT INTO content_status_events (content_id, from_status, to_status, user_id, created_at)
+      SELECT id, NULL, 'draft', ${admin.id}::uuid, created_at FROM contents
+      UNION ALL
+      SELECT id, 'draft', 'in_review', ${admin.id}::uuid, created_at + (updated_at - created_at) / 2
+        FROM contents WHERE status IN ('in_review', 'published')
+      UNION ALL
+      SELECT id, 'in_review', 'published', ${admin.id}::uuid, updated_at FROM contents WHERE status = 'published'
+    `.execute(trx);
   });
 
   console.log(`Seeded 1 user, ${clients.length} clients, ${contents.length} contents.`);
