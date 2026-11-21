@@ -52,6 +52,13 @@ src/
 - Comments only where the reason is not obvious from the code.
 - Never commit `.env*` files except `.env.example`.
 
+## Workflow
+
+- `main` only changes through pull requests; every change gets its own branch (`feat/…`, `fix/…`, `chore/…`).
+- A change is verified locally (`npm run lint`, `npx tsc --noEmit`, and in the browser at desktop and 375px widths) before it is committed.
+- Pull requests must pass CI (lint, typecheck and production build) before they are merged.
+- Vercel builds a preview deployment for every pull request; check it before merging.
+
 ## Deployment
 
-Vercel, root directory `frontend/`. Set `API_URL=https://panel-api.lazyantlab.com`.
+Vercel, root directory `frontend/`, production at `https://client-content-panel-frontend.vercel.app`. `main` deploys automatically. Set `API_URL=https://panel-api.lazyantlab.com`.
