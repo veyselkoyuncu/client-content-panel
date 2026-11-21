@@ -61,4 +61,4 @@ src/
 
 ## Deployment
 
-Vercel, root directory `frontend/`, production at `https://client-content-panel-frontend.vercel.app`. `main` deploys automatically. Set `API_URL=https://panel-api.lazyantlab.com`.
+Vercel, root directory `frontend/`, production at `https://client-content-panel-frontend.vercel.app`. `main` deploys automatically. Environment variables: `API_URL=https://panel-api.lazyantlab.com`, and `NEXT_PUBLIC_DEMO_EMAIL` / `NEXT_PUBLIC_DEMO_PASSWORD` to show the demo account shortcut on the login screen (optional).
