@@ -53,14 +53,19 @@ export function setupTestApp() {
     return body.data as { id: string; name: string };
   }
 
-  async function createContent(clientId: string, extra: object = {}) {
+  async function createContent(clientId: string, extra: { status?: string } & Record<string, unknown> = {}) {
+    const publish = extra.status === 'published';
     const { body } = await request('POST', '/api/contents', {
       clientId,
       title: 'Örnek içerik',
       type: 'blog_post',
       ...extra,
+      ...(publish ? { status: 'in_review' } : {}),
     });
-    return body.data as { id: string; status: string };
+    const content = body.data as { id: string; status: string };
+    if (!publish) return content;
+    const published = await request('PATCH', `/api/contents/${content.id}/status`, { status: 'published' });
+    return published.body.data as { id: string; status: string };
   }
 
   return { db, app: appPromise, request, createClient, createContent };

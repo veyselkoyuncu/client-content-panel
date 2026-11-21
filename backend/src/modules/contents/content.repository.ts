@@ -93,3 +93,15 @@ export async function remove(db: DB, id: string) {
   const result = await db.deleteFrom('contents').where('id', '=', id).executeTakeFirst();
   return result.numDeletedRows > 0n;
 }
+
+export async function findStatusForUpdate(db: DB, id: string) {
+  const row = await db.selectFrom('contents').select('status').where('id', '=', id).forUpdate().executeTakeFirst();
+  return row?.status;
+}
+
+export async function insertStatusEvent(
+  db: DB,
+  event: { contentId: string; fromStatus: ContentStatus | null; toStatus: ContentStatus; userId: string },
+) {
+  await db.insertInto('contentStatusEvents').values(event).execute();
+}

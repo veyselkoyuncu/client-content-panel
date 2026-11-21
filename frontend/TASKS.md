@@ -29,6 +29,16 @@
 - [x] Login: split layout with product intro and a demo account shortcut
 - [x] Toast feedback for create, update, status change and delete
 
+## Iteration 3: status workflow and history
+- [x] Rename to antflow with a custom logo, favicon and Lazy Ant Lab credit
+- [x] Status menus, form and board only offer allowed transitions
+- [x] Published content opens read-only with an "Unpublish" action
+- [x] History timeline at the bottom of the content panel
+- [x] Activity page in the sidebar: all status changes with client and status filters, paginated
+- [x] Activity page: search by content title next to the client filter
+- [ ] Drag and drop between board columns (desktop, keyboard accessible)
+- [ ] Subtle animation on the login flow preview
+
 ## Quality
 - [x] Loading, empty and error states on every screen, 404 and error pages
 - [x] Responsive layouts (mobile navigation, stacked panels, cards instead of tables)

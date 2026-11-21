@@ -34,7 +34,9 @@ src/
 
 - Every content item belongs to exactly one client (`client_id NOT NULL`, `ON DELETE RESTRICT`).
 - Content types: `social_post`, `blog_post`, `web_page`, `other`.
-- Content statuses: `draft`, `in_review`, `published`. New content starts as `draft`. Any status can move to any other status.
+- Content statuses: `draft`, `in_review`, `published`. New content starts as `draft` or `in_review`, never `published`.
+- Allowed transitions: `draft → in_review`, `in_review → draft | published`. Published content is read-only; the only way back is the unpublish action (`published → draft`). Invalid transitions return `409 INVALID_TRANSITION`.
+- Every status change (and creation) is recorded in `content_status_events` with the acting user, in the same transaction as the change.
 - Content has an optional due date (planned publish date). Content is overdue when its due date is before today (Europe/Istanbul) and it is not published.
 - Client names are unique, case-insensitive with Turkish casing rules.
 - A client with content cannot be deleted.

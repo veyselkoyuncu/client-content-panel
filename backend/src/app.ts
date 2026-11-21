@@ -9,6 +9,7 @@ import { clientRoutes } from './modules/clients/client.routes.js';
 import { contentRoutes } from './modules/contents/content.routes.js';
 import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { healthRoutes } from './modules/health/health.routes.js';
+import { historyRoutes } from './modules/history/history.routes.js';
 import { registerErrorHandling } from './shared/error-handler.js';
 
 declare module 'fastify' {
@@ -59,6 +60,7 @@ export async function buildApp({ env, db, logger = true }: AppDependencies) {
         await protectedApi.register(clientRoutes);
         await protectedApi.register(contentRoutes);
         await protectedApi.register(dashboardRoutes);
+        await protectedApi.register(historyRoutes);
       });
     },
     { prefix: '/api' },

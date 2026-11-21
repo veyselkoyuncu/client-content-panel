@@ -1,4 +1,5 @@
 import { type QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { activityKeys } from "@/features/activity/api";
 import { clientKeys } from "@/features/clients/api";
 import { dashboardKeys } from "@/features/dashboard/api";
 import { api, type DataResponse } from "@/lib/api";
@@ -66,7 +67,21 @@ function invalidateRelated(queryClient: QueryClient) {
     queryClient.invalidateQueries({ queryKey: contentKeys.all }),
     queryClient.invalidateQueries({ queryKey: clientKeys.all }),
     queryClient.invalidateQueries({ queryKey: dashboardKeys.summary }),
+    queryClient.invalidateQueries({ queryKey: activityKeys.all }),
   ]);
+}
+
+export function useUnpublishContent() {
+  const queryClient = useQueryClient();
+  const notify = useToast();
+  return useMutation({
+    mutationFn: (id: string) => api.post<DataResponse<Content>>(`/contents/${id}/unpublish`).then((r) => r.data),
+    onSuccess: (content) => {
+      notify(`"${content.title}" yayından kaldırıldı ve taslağa alındı.`, "draft");
+      return invalidateRelated(queryClient);
+    },
+    onError: (error) => notify(error.message, "error"),
+  });
 }
 
 export function useSaveContent(id?: string) {

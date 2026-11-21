@@ -1,10 +1,11 @@
 "use client";
 
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { Menu } from "@/components/ui/menu";
+import { Eye, MoreHorizontal, Pencil, Trash2, Undo2 } from "lucide-react";
+import { Menu, type MenuSection } from "@/components/ui/menu";
 import { StatusDot } from "@/components/ui/status-badge";
-import { CONTENT_STATUSES, STATUS_LABELS } from "@/lib/labels";
-import { useUpdateContentStatus } from "./api";
+import { STATUS_LABELS } from "@/lib/labels";
+import { ALLOWED_TRANSITIONS, isLocked } from "@/lib/transitions";
+import { useUnpublishContent, useUpdateContentStatus } from "./api";
 import type { Content } from "./types";
 
 interface ContentMenuProps {
@@ -15,6 +16,41 @@ interface ContentMenuProps {
 
 export function ContentMenu({ content, onEdit, onDelete }: ContentMenuProps) {
   const updateStatus = useUpdateContentStatus();
+  const unpublish = useUnpublishContent();
+  const locked = isLocked(content.status);
+
+  const sections: MenuSection[] = locked
+    ? [
+        {
+          title: "Yayında",
+          items: [
+            {
+              key: "unpublish",
+              label: "Yayından kaldır",
+              icon: <Undo2 className="size-4" />,
+              onSelect: () => unpublish.mutate(content.id),
+            },
+          ],
+        },
+        { items: [{ key: "view", label: "Görüntüle", icon: <Eye className="size-4" />, onSelect: onEdit }] },
+      ]
+    : [
+        {
+          title: "Duruma taşı",
+          items: ALLOWED_TRANSITIONS[content.status].map((status) => ({
+            key: status,
+            label: STATUS_LABELS[status],
+            icon: <StatusDot status={status} className="size-2" />,
+            onSelect: () => updateStatus.mutate({ id: content.id, status }),
+          })),
+        },
+        {
+          items: [
+            { key: "edit", label: "Düzenle", icon: <Pencil className="size-4" />, onSelect: onEdit },
+            { key: "delete", label: "Sil", icon: <Trash2 className="size-4" />, danger: true, onSelect: onDelete },
+          ],
+        },
+      ];
 
   return (
     <Menu
@@ -28,26 +64,7 @@ export function ContentMenu({ content, onEdit, onDelete }: ContentMenuProps) {
           <MoreHorizontal className="size-4.5" />
         </button>
       )}
-      sections={[
-        {
-          title: "Duruma taşı",
-          items: CONTENT_STATUSES.map((status) => ({
-            key: status,
-            label: STATUS_LABELS[status],
-            icon: <StatusDot status={status} className="size-2" />,
-            checked: content.status === status,
-            onSelect: () => {
-              if (content.status !== status) updateStatus.mutate({ id: content.id, status });
-            },
-          })),
-        },
-        {
-          items: [
-            { key: "edit", label: "Düzenle", icon: <Pencil className="size-4" />, onSelect: onEdit },
-            { key: "delete", label: "Sil", icon: <Trash2 className="size-4" />, danger: true, onSelect: onDelete },
-          ],
-        },
-      ]}
+      sections={sections}
     />
   );
 }

@@ -34,7 +34,7 @@ describe('dashboard summary', () => {
       overdueCount: 1,
     });
 
-    await request('PATCH', `/api/contents/${published.id}/status`, { status: 'draft' });
+    await request('POST', `/api/contents/${published.id}/unpublish`);
     const after = (await request('GET', '/api/dashboard/summary')).body.data;
     expect(after.contentsByStatus).toEqual({ draft: 3, in_review: 1, published: 0 });
     expect(after.totalContents).toBe(4);

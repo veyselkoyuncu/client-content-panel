@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2, Users } from "lucide-react";
+import { Lock, Trash2, Undo2, Users } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
@@ -12,7 +12,9 @@ import { useClients } from "@/features/clients/api";
 import { ApiError, mergeErrors } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import { CONTENT_STATUSES, CONTENT_TYPES, type ContentStatus, STATUS_LABELS, TYPE_LABELS } from "@/lib/labels";
-import { type ContentInput, useContent, useSaveContent } from "./api";
+import { ALLOWED_TRANSITIONS, INITIAL_STATUSES, isLocked } from "@/lib/transitions";
+import { type ContentInput, useContent, useSaveContent, useUnpublishContent } from "./api";
+import { ContentHistory } from "./content-history";
 import type { Content } from "./types";
 
 const FORM_ID = "content-form";
@@ -26,11 +28,15 @@ const segment = (active: boolean) =>
 interface FormBodyProps {
   initial: ContentInput;
   contentId?: string;
+  readOnly: boolean;
   onSaved: () => void;
   onSavingChange: (saving: boolean) => void;
 }
 
-function ContentFormBody({ initial, contentId, onSaved, onSavingChange }: FormBodyProps) {
+function ContentFormBody({ initial, contentId, readOnly, onSaved, onSavingChange }: FormBodyProps) {
+  const statusOptions: readonly ContentStatus[] = contentId
+    ? [initial.status, ...ALLOWED_TRANSITIONS[initial.status]]
+    : INITIAL_STATUSES;
   const clients = useClients();
   const save = useSaveContent(contentId);
   const [values, setValues] = useState(initial);
@@ -86,6 +92,13 @@ function ContentFormBody({ initial, contentId, onSaved, onSavingChange }: FormBo
           {formError}
         </p>
       )}
+      {readOnly && (
+        <p className="flex items-start gap-2 rounded-xl bg-published-bg px-3.5 py-2.5 text-sm font-semibold text-published-fg">
+          <Lock className="mt-0.5 size-4 shrink-0" />
+          Bu içerik yayında ve kilitli. Değişiklik yapmak için önce yayından kaldırın.
+        </p>
+      )}
+      <fieldset disabled={readOnly} className="contents">
       <Field label="Başlık" required error={errors.title}>
         {(props) => (
           <Input {...props} value={values.title} maxLength={200} onChange={(e) => update("title", e.target.value)} />
@@ -119,12 +132,25 @@ function ContentFormBody({ initial, contentId, onSaved, onSavingChange }: FormBo
         <legend className="mb-1.5 text-[13px] font-bold text-ink-soft">Durum</legend>
         <div className="grid grid-cols-3 gap-2">
           {CONTENT_STATUSES.map((status) => (
-            <button key={status} type="button" aria-pressed={values.status === status} onClick={() => update("status", status)} className={segment(values.status === status)}>
+            <button
+              key={status}
+              type="button"
+              aria-pressed={values.status === status}
+              disabled={!statusOptions.includes(status)}
+              onClick={() => update("status", status)}
+              className={cn(segment(values.status === status), "disabled:cursor-not-allowed disabled:opacity-40")}
+            >
               <StatusDot status={status} className="size-2" />
               {STATUS_LABELS[status]}
             </button>
           ))}
         </div>
+        {!readOnly && (
+          <p className="text-xs text-muted">
+            {contentId ? "Akış: Taslak → Onayda → Yayında. Onaydaki içerik revizyon için taslağa dönebilir." : "Yeni içerik Taslak ya da Onayda olarak başlar."}
+          </p>
+        )}
+        {errors.status && <p className="text-xs font-semibold text-danger">{errors.status}</p>}
       </fieldset>
       <Field label="Teslim tarihi" error={errors.dueDate} hint="Planlanan yayın tarihi.">
         {(props) => (
@@ -155,6 +181,7 @@ function ContentFormBody({ initial, contentId, onSaved, onSavingChange }: FormBo
           />
         )}
       </Field>
+      </fieldset>
     </form>
   );
 }
@@ -169,8 +196,11 @@ interface ContentFormDrawerProps {
 
 export function ContentFormDrawer({ open, contentId, defaults, onClose, onDelete }: ContentFormDrawerProps) {
   const existing = useContent(contentId);
+  const unpublish = useUnpublishContent();
   const [saving, setSaving] = useState(false);
   const isEdit = Boolean(contentId);
+  const readOnly = Boolean(existing.data && isLocked(existing.data.status));
+  const defaultStatus = defaults?.status && INITIAL_STATUSES.includes(defaults.status) ? defaults.status : "draft";
 
   const initial: ContentInput | undefined = isEdit
     ? existing.data && {
@@ -186,7 +216,7 @@ export function ContentFormDrawer({ open, contentId, defaults, onClose, onDelete
         clientId: defaults?.clientId ?? "",
         title: "",
         type: "social_post",
-        status: defaults?.status ?? "draft",
+        status: defaultStatus,
         dueDate: null,
         body: null,
         link: null,
@@ -196,29 +226,54 @@ export function ContentFormDrawer({ open, contentId, defaults, onClose, onDelete
     <Drawer
       open={open}
       onClose={onClose}
-      eyebrow={isEdit ? "İçeriği düzenle" : "Yeni içerik"}
+      eyebrow={!isEdit ? "Yeni içerik" : readOnly ? "Yayındaki içerik" : "İçeriği düzenle"}
       title={isEdit ? (existing.data?.title ?? "İçerik") : "İçerik oluştur"}
       footer={
-        <>
-          {isEdit && existing.data && (
-            <Button variant="danger" size="sm" icon={<Trash2 className="size-4" />} onClick={() => onDelete(existing.data)}>
-              Sil
+        readOnly && existing.data ? (
+          <>
+            <Button
+              variant="ghost"
+              icon={<Undo2 className="size-4" />}
+              loading={unpublish.isPending}
+              onClick={() => unpublish.mutate(existing.data.id)}
+            >
+              Yayından kaldır
             </Button>
-          )}
-          <span className="flex-1" />
-          <Button variant="ghost" onClick={onClose}>
-            Vazgeç
-          </Button>
-          <Button type="submit" form={FORM_ID} loading={saving}>
-            Kaydet
-          </Button>
-        </>
+            <span className="flex-1" />
+            <Button onClick={onClose}>Kapat</Button>
+          </>
+        ) : (
+          <>
+            {isEdit && existing.data && (
+              <Button variant="danger" size="sm" icon={<Trash2 className="size-4" />} onClick={() => onDelete(existing.data)}>
+                Sil
+              </Button>
+            )}
+            <span className="flex-1" />
+            <Button variant="ghost" onClick={onClose}>
+              Vazgeç
+            </Button>
+            <Button type="submit" form={FORM_ID} loading={saving}>
+              Kaydet
+            </Button>
+          </>
+        )
       }
     >
       {isEdit && existing.isError ? (
         <ErrorState message={existing.error.message} onRetry={() => existing.refetch()} />
       ) : initial ? (
-        <ContentFormBody key={contentId ?? "new"} initial={initial} contentId={contentId} onSaved={onClose} onSavingChange={setSaving} />
+        <>
+          <ContentFormBody
+            key={`${contentId ?? "new"}-${existing.data?.status ?? ""}`}
+            initial={initial}
+            contentId={contentId}
+            readOnly={readOnly}
+            onSaved={onClose}
+            onSavingChange={setSaving}
+          />
+          {contentId && <ContentHistory contentId={contentId} />}
+        </>
       ) : (
         <Skeleton className="h-96" />
       )}

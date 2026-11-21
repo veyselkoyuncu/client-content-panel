@@ -64,9 +64,18 @@ src/
 | `sessions` | Aktif oturumlar; cookie token'ının yalnızca SHA-256 hash'i saklanır |
 | `clients` | Ajansın çalıştığı markalar |
 | `contents` | İçerikler; her biri tek bir müşteriye bağlıdır (`ON DELETE RESTRICT`). İsteğe bağlı teslim tarihi ve bağlantı (`link`, yalnızca http/https) içerir |
+| `content_status_events` | Her durum değişikliği: önceki ve yeni durum, değiştiren kullanıcı, zaman |
 
 İçerik `type`: `social_post`, `blog_post`, `web_page`, `other`
 İçerik `status`: `draft`, `in_review`, `published`
+
+### Durum akışı
+
+- Yeni içerik `draft` ya da `in_review` olarak başlar; onaysız yayına çıkılamaz.
+- İzin verilen geçişler: `draft → in_review`, `in_review → draft | published`.
+- Yayındaki içerik kilitlidir: düzenlenemez, silinemez, durumu değiştirilemez. Tek çıkış yolu `unpublish` ile taslağa dönmektir.
+- Geçersiz geçişler `409 INVALID_TRANSITION`, kilitli içeriğe yazma `409 CONTENT_LOCKED` döner.
+- Durum değişikliği ve geçmiş kaydı aynı transaction içinde yazılır; satır kilidi (`SELECT … FOR UPDATE`) eşzamanlı güncellemelerde tutarlılığı korur.
 
 ## Endpoint'ler
 
@@ -87,7 +96,10 @@ Health ve login dışındaki tüm endpoint'ler oturum cookie'si gerektirir.
 | POST | `/api/contents` | İçerik oluşturma (durum verilmezse `draft`) |
 | GET | `/api/contents/:id` | İçerik detayı |
 | PATCH | `/api/contents/:id` | İçerik güncelleme |
-| PATCH | `/api/contents/:id/status` | Yalnızca durum güncelleme |
+| PATCH | `/api/contents/:id/status` | Yalnızca durum güncelleme (izin verilen geçişler) |
+| POST | `/api/contents/:id/unpublish` | Yayındaki içeriği taslağa geri alma |
+| GET | `/api/contents/:id/history` | İçeriğin durum geçmişi (en yeni önce) |
+| GET | `/api/activity?clientId=&status=&q=&page=&pageSize=` | Tüm durum değişiklikleri, başlıkta arama, sayfalı |
 | DELETE | `/api/contents/:id` | İçerik silme |
 | GET | `/api/dashboard/summary` | Toplamlar, durum sayıları, geciken içerik sayısı, her durumdaki son içerikler, ilgilenilmesi gereken içerikler |
 
