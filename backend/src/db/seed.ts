@@ -40,21 +40,22 @@ interface SeedContent {
   due: number | null;
   updated: number;
   body?: string;
+  link?: string;
 }
 
 const contents: SeedContent[] = [
-  { client: 'deniz', title: 'Kış menüsü lansmanı – Carousel', type: 'social_post', status: 'in_review', due: 2, updated: 1, body: '5 görsellik carousel. Fiyatlar müşteriden onay bekliyor. Yayın saati 19.00.' },
+  { client: 'deniz', title: 'Kış menüsü lansmanı – Carousel', type: 'social_post', status: 'in_review', due: 2, updated: 1, link: 'https://example.com/drive/kis-menusu-carousel', body: '5 görsellik carousel. Fiyatlar müşteriden onay bekliyor. Yayın saati 19.00.' },
   { client: 'deniz', title: 'Barista ile 1 dakika', type: 'social_post', status: 'in_review', due: 3, updated: 5 },
   { client: 'deniz', title: 'Filtre kahve demleme rehberi', type: 'blog_post', status: 'draft', due: 7, updated: 20 },
   { client: 'deniz', title: 'Yılbaşı hediye seti sayfası', type: 'web_page', status: 'draft', due: 11, updated: 30 },
-  { client: 'deniz', title: 'Kahve çekirdeğinin hikâyesi', type: 'blog_post', status: 'published', due: -10, updated: 240 },
+  { client: 'deniz', title: 'Kahve çekirdeğinin hikâyesi', type: 'blog_post', status: 'published', due: -10, updated: 240, link: 'https://example.com/deniz-kahve/blog/kahve-cekirdeginin-hikayesi' },
   { client: 'deniz', title: 'Yeni şube açılışı', type: 'social_post', status: 'published', due: -12, updated: 290 },
   { client: 'atlas', title: '2027 dekorasyon trendleri', type: 'blog_post', status: 'draft', due: 8, updated: 3 },
   { client: 'atlas', title: 'Showroom açılış duyurusu', type: 'social_post', status: 'published', due: -8, updated: 190 },
-  { client: 'atlas', title: 'Sezon kataloğu', type: 'web_page', status: 'published', due: -3, updated: 70 },
+  { client: 'atlas', title: 'Sezon kataloğu', type: 'web_page', status: 'published', due: -3, updated: 70, link: 'https://example.com/atlas-mobilya/katalog' },
   { client: 'atlas', title: 'Yatak odası koleksiyonu tanıtımı', type: 'social_post', status: 'in_review', due: 4, updated: 9 },
   { client: 'atlas', title: 'Kurulum hizmeti SSS sayfası', type: 'web_page', status: 'draft', due: null, updated: 50 },
-  { client: 'mavi', title: 'İmplant tedavisi hizmet sayfası', type: 'web_page', status: 'published', due: -2, updated: 26 },
+  { client: 'mavi', title: 'İmplant tedavisi hizmet sayfası', type: 'web_page', status: 'published', due: -2, updated: 26, link: 'https://example.com/mavi-dis/implant' },
   { client: 'mavi', title: 'Diş beyazlatma hakkında 5 soru', type: 'blog_post', status: 'draft', due: 6, updated: 14 },
   { client: 'mavi', title: 'Çocuklarda ilk diş muayenesi', type: 'social_post', status: 'in_review', due: 1, updated: 8 },
   { client: 'mavi', title: 'Hasta yorumları videosu', type: 'other', status: 'published', due: -15, updated: 360 },
@@ -66,11 +67,11 @@ const contents: SeedContent[] = [
   { client: 'lina', title: 'Cilt bakım rutini rehberi', type: 'blog_post', status: 'draft', due: 0, updated: 2 },
   { client: 'lina', title: 'Black Friday kampanya görseli', type: 'social_post', status: 'in_review', due: 4, updated: 4 },
   { client: 'lina', title: 'Yeni serum lansman sayfası', type: 'web_page', status: 'draft', due: 9, updated: 40 },
-  { client: 'lina', title: 'Kış cilt bakımı önerileri', type: 'social_post', status: 'published', due: -4, updated: 96 },
+  { client: 'lina', title: 'Kış cilt bakımı önerileri', type: 'social_post', status: 'published', due: -4, updated: 96, link: 'https://example.com/lina-kozmetik/instagram/kis-bakimi' },
   { client: 'lina', title: 'Influencer iş birliği duyurusu', type: 'other', status: 'published', due: -9, updated: 210 },
   { client: 'pera', title: 'KVKK bilgilendirme duyurusu', type: 'social_post', status: 'published', due: -5, updated: 120 },
   { client: 'pera', title: 'Hakkımızda sayfası yenileme', type: 'web_page', status: 'draft', due: 12, updated: 60 },
-  { client: 'pera', title: 'Haftalık hukuk bülteni', type: 'blog_post', status: 'published', due: -1, updated: 30 },
+  { client: 'pera', title: 'Haftalık hukuk bülteni', type: 'blog_post', status: 'published', due: -1, updated: 30, link: 'https://example.com/pera-hukuk/bulten' },
   { client: 'pera', title: 'Kira hukukunda yeni düzenlemeler', type: 'blog_post', status: 'in_review', due: 2, updated: 12 },
 ];
 
@@ -112,6 +113,7 @@ async function main() {
           type: content.type,
           status: content.status,
           body: content.body ?? null,
+          link: content.link ?? null,
           dueDate: content.due === null ? null : dayOffset(content.due),
           createdAt: hoursAgo(content.updated + 72),
           updatedAt: hoursAgo(content.updated),

@@ -21,6 +21,7 @@ export interface ContentInput {
   status: ContentStatus;
   dueDate: string | null;
   body: string | null;
+  link: string | null;
 }
 
 interface ContentListResponse {

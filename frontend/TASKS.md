@@ -25,7 +25,7 @@
 - [x] Board: limited cards per column with "show more"
 - [x] Board on mobile: one column at a time with status tabs, review column first
 - [x] List view: server-side pagination
-- [ ] Content link: field in the form, link icon on cards and rows
+- [x] Content link: field in the form, link icon on cards and rows
 - [ ] Login: split layout with product intro and a demo account shortcut
 - [ ] Toast feedback for create, update, status change and delete
 

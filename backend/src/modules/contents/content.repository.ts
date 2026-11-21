@@ -26,6 +26,7 @@ export function selectContents(db: DB) {
       'contents.type',
       'contents.status',
       'contents.dueDate',
+      'contents.link',
       'contents.createdAt',
       'contents.updatedAt',
       'clients.id as clientId',
