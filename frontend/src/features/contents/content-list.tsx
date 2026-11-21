@@ -3,7 +3,7 @@ import { OverdueBadge, StatusBadge } from "@/components/ui/status-badge";
 import { TypeBadge, TypeIconBox } from "@/components/ui/type-icon";
 import { cn } from "@/lib/cn";
 import { formatDueDate } from "@/lib/format";
-import { CONTENT_STATUSES, type ContentStatus, STATUS_LABELS, TYPE_LABELS } from "@/lib/labels";
+import { CONTENT_STATUSES, type ContentStatus, STATUS_LABELS } from "@/lib/labels";
 import { ContentLink } from "./content-link";
 import { ContentMenu } from "./content-menu";
 import type { Content, StatusCounts } from "./types";
@@ -72,12 +72,12 @@ export function ContentList({ contents, onEdit, onDelete }: ListProps) {
           <span className="flex min-w-0 items-center gap-2 text-[13px] font-semibold max-md:col-span-2 max-md:pl-12">
             <Avatar name={content.client.name} size={22} />
             <span className="truncate">{content.client.name}</span>
-            <span className="text-muted md:hidden">· {TYPE_LABELS[content.type]}</span>
           </span>
           <span className="hidden md:block">
             <TypeBadge type={content.type} />
           </span>
-          <span className="flex gap-1.5 max-md:col-span-2 max-md:pl-12">
+          <span className="flex flex-wrap gap-1.5 max-md:col-span-2 max-md:pl-12">
+            <TypeBadge type={content.type} className="md:hidden" />
             <StatusBadge status={content.status} />
             {content.isOverdue && <span className="md:hidden"><OverdueBadge /></span>}
           </span>
