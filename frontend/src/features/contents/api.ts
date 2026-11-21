@@ -2,7 +2,8 @@ import { type QueryClient, useMutation, useQuery, useQueryClient } from "@tansta
 import { clientKeys } from "@/features/clients/api";
 import { dashboardKeys } from "@/features/dashboard/api";
 import { api, type DataResponse } from "@/lib/api";
-import type { ContentStatus, ContentType } from "@/lib/labels";
+import { useToast } from "@/components/ui/toast";
+import { type ContentStatus, type ContentType, STATUS_LABELS } from "@/lib/labels";
 import type { Content, StatusCounts } from "./types";
 
 export interface ContentFilters {
@@ -70,18 +71,26 @@ function invalidateRelated(queryClient: QueryClient) {
 
 export function useSaveContent(id?: string) {
   const queryClient = useQueryClient();
+  const notify = useToast();
   return useMutation({
     mutationFn: (input: ContentInput) =>
       (id
         ? api.patch<DataResponse<Content>>(`/contents/${id}`, input)
         : api.post<DataResponse<Content>>("/contents", input)
       ).then((r) => r.data),
-    onSuccess: () => invalidateRelated(queryClient),
+    onSuccess: (content) => {
+      notify(
+        id ? `"${content.title}" güncellendi.` : `"${content.title}" oluşturuldu.`,
+        id ? "info" : "success",
+      );
+      return invalidateRelated(queryClient);
+    },
   });
 }
 
 export function useUpdateContentStatus() {
   const queryClient = useQueryClient();
+  const notify = useToast();
   return useMutation({
     mutationFn: ({ id, status }: { id: string; status: ContentStatus }) =>
       api.patch<DataResponse<Content>>(`/contents/${id}/status`, { status }).then((r) => r.data),
@@ -97,7 +106,10 @@ export function useUpdateContentStatus() {
       }
       return { snapshots };
     },
-    onError: (_error, _variables, context) => {
+    onSuccess: (content) =>
+      notify(`"${content.title}" ${STATUS_LABELS[content.status]} durumuna taşındı.`, content.status),
+    onError: (error, _variables, context) => {
+      notify(error.message, "error");
       for (const [key, value] of context?.snapshots ?? []) {
         queryClient.setQueryData(key, value);
       }
@@ -108,8 +120,12 @@ export function useUpdateContentStatus() {
 
 export function useDeleteContent() {
   const queryClient = useQueryClient();
+  const notify = useToast();
   return useMutation({
     mutationFn: (id: string) => api.delete(`/contents/${id}`),
-    onSuccess: () => invalidateRelated(queryClient),
+    onSuccess: () => {
+      notify("İçerik silindi.", "danger");
+      return invalidateRelated(queryClient);
+    },
   });
 }

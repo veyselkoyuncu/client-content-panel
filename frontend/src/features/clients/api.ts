@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/components/ui/toast";
 import { api, type DataResponse } from "@/lib/api";
 
 export interface Client {
@@ -45,29 +46,35 @@ export function useClient(id: string) {
 
 export function useSaveClient(id?: string) {
   const queryClient = useQueryClient();
+  const notify = useToast();
   return useMutation({
     mutationFn: (input: ClientInput) =>
       (id
         ? api.patch<DataResponse<Client>>(`/clients/${id}`, input)
         : api.post<DataResponse<Client>>("/clients", input)
       ).then((r) => r.data),
-    onSuccess: () =>
-      Promise.all([
+    onSuccess: (client) => {
+      notify(id ? `"${client.name}" güncellendi.` : `"${client.name}" eklendi.`, id ? "info" : "success");
+      return Promise.all([
         queryClient.invalidateQueries({ queryKey: clientKeys.all }),
         queryClient.invalidateQueries({ queryKey: ["contents"] }),
         queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
-      ]),
+      ]);
+    },
   });
 }
 
 export function useDeleteClient() {
   const queryClient = useQueryClient();
+  const notify = useToast();
   return useMutation({
     mutationFn: (id: string) => api.delete(`/clients/${id}`),
-    onSuccess: () =>
-      Promise.all([
+    onSuccess: () => {
+      notify("Müşteri silindi.", "danger");
+      return Promise.all([
         queryClient.invalidateQueries({ queryKey: clientKeys.all }),
         queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
-      ]),
+      ]);
+    },
   });
 }

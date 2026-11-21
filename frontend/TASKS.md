@@ -27,7 +27,7 @@
 - [x] List view: server-side pagination
 - [x] Content link: field in the form, link icon on cards and rows
 - [x] Login: split layout with product intro and a demo account shortcut
-- [ ] Toast feedback for create, update, status change and delete
+- [x] Toast feedback for create, update, status change and delete
 
 ## Quality
 - [ ] Loading, empty and error states on every screen
