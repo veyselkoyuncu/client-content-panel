@@ -94,6 +94,27 @@ describe('contents', () => {
     expect(wildcard.body.data).toEqual([]);
   });
 
+  it('paginates with the total of the filtered result', async () => {
+    const client = await createClient('Sayfalı Müşteri');
+    for (let index = 1; index <= 5; index++) {
+      await createContent(client.id, { title: `İçerik ${index}`, status: index <= 3 ? 'draft' : 'published' });
+    }
+
+    const first = await request('GET', '/api/contents?sort=title&page=1&pageSize=2');
+    expect(first.body.data.map((c: { title: string }) => c.title)).toEqual(['İçerik 1', 'İçerik 2']);
+    expect(first.body.meta).toMatchObject({ total: 5, page: 1, pageSize: 2 });
+
+    const last = await request('GET', '/api/contents?sort=title&page=3&pageSize=2');
+    expect(last.body.data.map((c: { title: string }) => c.title)).toEqual(['İçerik 5']);
+
+    const drafts = await request('GET', '/api/contents?status=draft&page=1&pageSize=2');
+    expect(drafts.body.meta.total).toBe(3);
+    expect(drafts.body.data).toHaveLength(2);
+
+    expect((await request('GET', '/api/contents?page=0')).status).toBe(400);
+    expect((await request('GET', '/api/contents?page=1&pageSize=500')).status).toBe(400);
+  });
+
   it('rejects unknown filter values', async () => {
     expect((await request('GET', '/api/contents?status=done')).status).toBe(400);
     expect((await request('GET', '/api/contents?clientId=abc')).status).toBe(400);

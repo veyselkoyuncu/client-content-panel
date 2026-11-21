@@ -20,11 +20,11 @@
 - [x] Collapsible sidebar as the main navigation (icon rail when collapsed) with client shortcuts
 - [x] Mobile: compact sticky top bar with the sidebar as a drawer
 - [x] Footer with app version and API status
-- [ ] Content type badges with distinct colors
-- [ ] Client filter: top clients as chips, the rest in a searchable popover
-- [ ] Board: limited cards per column with "show more"
-- [ ] Board on mobile: one column at a time with status tabs, review column first
-- [ ] List view: server-side pagination
+- [x] Content type badges with distinct colors
+- [x] Client filter: top clients as chips, the rest in a searchable popover
+- [x] Board: limited cards per column with "show more"
+- [x] Board on mobile: one column at a time with status tabs, review column first
+- [x] List view: server-side pagination
 - [ ] Content link: field in the form, link icon on cards and rows
 - [ ] Login: split layout with product intro and a demo account shortcut
 - [ ] Toast feedback for create, update, status change and delete

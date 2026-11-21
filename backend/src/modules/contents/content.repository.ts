@@ -5,7 +5,7 @@ import { containsText, today, turkishOrder } from '../../shared/sql.js';
 import type { ContentStatus } from './content.constants.js';
 import type { ListContentsQuery } from './content.schemas.js';
 
-type Filters = Omit<ListContentsQuery, 'sort'>;
+type Filters = Omit<ListContentsQuery, 'sort' | 'page' | 'pageSize'>;
 
 function filterBy(eb: ExpressionBuilder<Database, 'contents'>, filters: Filters) {
   const conditions: Expression<SqlBool>[] = [];
@@ -38,18 +38,25 @@ export function selectContents(db: DB) {
 
 export type ContentRow = Awaited<ReturnType<ReturnType<typeof selectContents>['execute']>>[number];
 
-export function list(db: DB, { sort, ...filters }: ListContentsQuery) {
-  const query = selectContents(db).where((eb) => filterBy(eb, filters));
+function sorted(query: ReturnType<typeof selectContents>, sort: ListContentsQuery['sort']) {
   switch (sort) {
     case 'dueDate':
-      return query.orderBy(sql`contents.due_date ASC NULLS LAST`).orderBy('contents.updatedAt', 'desc').execute();
+      return query.orderBy(sql`contents.due_date ASC NULLS LAST`).orderBy('contents.updatedAt', 'desc');
     case '-createdAt':
-      return query.orderBy('contents.createdAt', 'desc').execute();
+      return query.orderBy('contents.createdAt', 'desc');
     case 'title':
-      return query.orderBy(turkishOrder('contents.title')).execute();
+      return query.orderBy(turkishOrder('contents.title'));
     default:
-      return query.orderBy('contents.updatedAt', 'desc').execute();
+      return query.orderBy('contents.updatedAt', 'desc');
   }
+}
+
+export function list(db: DB, { sort, page, pageSize, ...filters }: ListContentsQuery) {
+  const query = sorted(
+    selectContents(db).where((eb) => filterBy(eb, filters)),
+    sort,
+  ).orderBy('contents.id');
+  return page ? query.limit(pageSize).offset((page - 1) * pageSize).execute() : query.execute();
 }
 
 export async function countByStatus(db: DB, filters: Omit<Filters, 'status'>) {

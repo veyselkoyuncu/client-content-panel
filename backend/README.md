@@ -83,7 +83,7 @@ Health ve login dışındaki tüm endpoint'ler oturum cookie'si gerektirir.
 | GET | `/api/clients/:id` | İçerik sayılarıyla müşteri detayı |
 | PATCH | `/api/clients/:id` | Müşteri güncelleme |
 | DELETE | `/api/clients/:id` | İçeriği olmayan müşteriyi silme |
-| GET | `/api/contents?status=&clientId=&type=&q=&sort=` | Müşteri bilgisiyle içerikler; `meta.statusCounts` diğer filtrelere göre durum sayılarını verir |
+| GET | `/api/contents?status=&clientId=&type=&q=&sort=&page=&pageSize=` | Müşteri bilgisiyle içerikler; `meta.total` filtrelenmiş toplamı, `meta.statusCounts` diğer filtrelere göre durum sayılarını verir. `page` verilirse sonuç sayfalanır (`pageSize` varsayılan 20, en fazla 100) |
 | POST | `/api/contents` | İçerik oluşturma (durum verilmezse `draft`) |
 | GET | `/api/contents/:id` | İçerik detayı |
 | PATCH | `/api/contents/:id` | İçerik güncelleme |

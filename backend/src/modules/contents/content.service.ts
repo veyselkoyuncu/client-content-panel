@@ -26,7 +26,11 @@ export async function listContents(db: DB, query: ListContentsQuery) {
     repository.list(db, query),
     repository.countByStatus(db, { clientId: query.clientId, type: query.type, q: query.q }),
   ]);
-  return { items: rows.map(toContentResponse), statusCounts };
+  const total = query.status
+    ? statusCounts[query.status]
+    : statusCounts.draft + statusCounts.in_review + statusCounts.published;
+  const pagination = query.page ? { page: query.page, pageSize: query.pageSize } : {};
+  return { items: rows.map(toContentResponse), meta: { total, ...pagination, statusCounts } };
 }
 
 export async function getContent(db: DB, id: string) {

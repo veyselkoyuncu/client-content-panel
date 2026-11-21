@@ -22,6 +22,15 @@
   --color-published: #1f9d55;
   --color-published-bg: #dff1e5;
   --color-published-fg: #13643a;
+  --color-type-social-bg: #e8effd;
+  --color-type-social-fg: #1d4ed8;
+  --color-type-blog-bg: #f1eafd;
+  --color-type-blog-fg: #6d28d9;
+  --color-type-web-bg: #e2f3f2;
+  --color-type-web-fg: #0f766e;
+  --color-type-other-bg: #eceef2;
+  --color-type-other-fg: #475569;
+
   --color-danger: #b42318;
   --color-danger-bg: #fdecea;
 
