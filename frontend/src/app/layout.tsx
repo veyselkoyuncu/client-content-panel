@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: { default: "akış · İçerik Takip", template: "%s · akış" },
+  title: { default: "antflow · İçerik Takip", template: "%s · antflow" },
   description: "Ajans hesap yöneticileri için müşteri ve içerik takip paneli.",
 };
 
