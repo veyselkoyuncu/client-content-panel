@@ -9,6 +9,11 @@ export const optionalText = (max: number) =>
     .nullish()
     .transform((value) => (value ? value : null));
 
+export const optionalUrl = (max: number) =>
+  optionalText(max).refine((value) => value === null || z.url({ protocol: /^https?$/ }).safeParse(value).success, {
+    error: 'Geçerli bir web adresi girin (https://...).',
+  });
+
 export const searchQuery = z
   .string()
   .trim()

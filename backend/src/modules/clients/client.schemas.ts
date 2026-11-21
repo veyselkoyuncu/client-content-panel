@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { optionalText, searchQuery } from '../../shared/schemas.js';
+import { optionalText, optionalUrl, searchQuery } from '../../shared/schemas.js';
 
 const name = z
   .string({ error: 'Müşteri adı zorunludur.' })
@@ -15,10 +15,7 @@ const phone = optionalText(30).refine((value) => value === null || /^\+?[\d\s()-
   error: 'Geçerli bir telefon numarası girin.',
 });
 
-const website = optionalText(255).refine(
-  (value) => value === null || z.url({ protocol: /^https?$/ }).safeParse(value).success,
-  { error: 'Geçerli bir web adresi girin (https://...).' },
-);
+const website = optionalUrl(255);
 
 export const createClientSchema = z.object({
   name,

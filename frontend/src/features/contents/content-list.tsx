@@ -4,6 +4,7 @@ import { TypeBadge, TypeIconBox } from "@/components/ui/type-icon";
 import { cn } from "@/lib/cn";
 import { formatDueDate } from "@/lib/format";
 import { CONTENT_STATUSES, type ContentStatus, STATUS_LABELS, TYPE_LABELS } from "@/lib/labels";
+import { ContentLink } from "./content-link";
 import { ContentMenu } from "./content-menu";
 import type { Content, StatusCounts } from "./types";
 
@@ -58,10 +59,13 @@ export function ContentList({ contents, onEdit, onDelete }: ListProps) {
           key={content.id}
           className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 py-3.5 md:grid-cols-[minmax(0,2.2fr)_minmax(0,1.3fr)_minmax(0,1.2fr)_8rem_6.5rem_2rem]"
         >
-          <button type="button" onClick={() => onEdit(content)} className="flex min-w-0 items-center gap-3 text-left">
-            <TypeIconBox type={content.type} />
-            <span className="truncate text-sm font-bold hover:underline">{content.title}</span>
-          </button>
+          <div className="flex min-w-0 items-center gap-1">
+            <button type="button" onClick={() => onEdit(content)} className="flex min-w-0 items-center gap-3 text-left">
+              <TypeIconBox type={content.type} />
+              <span className="truncate text-sm font-bold hover:underline">{content.title}</span>
+            </button>
+            {content.link && <ContentLink href={content.link} />}
+          </div>
           <div className="flex items-center gap-2 md:hidden">
             <ContentMenu content={content} onEdit={() => onEdit(content)} onDelete={() => onDelete(content)} />
           </div>

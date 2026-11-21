@@ -11,6 +11,7 @@ export interface Content {
   updatedAt: string;
   client: { id: string; name: string };
   body?: string | null;
+  link: string | null;
 }
 
 export type StatusCounts = Record<ContentStatus, number>;

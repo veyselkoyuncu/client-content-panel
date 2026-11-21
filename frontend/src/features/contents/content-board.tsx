@@ -8,6 +8,7 @@ import { TypeBadge } from "@/components/ui/type-icon";
 import { cn } from "@/lib/cn";
 import { formatDueDate } from "@/lib/format";
 import { CONTENT_STATUSES, type ContentStatus, STATUS_LABELS, STATUS_STYLES } from "@/lib/labels";
+import { ContentLink } from "./content-link";
 import { ContentMenu } from "./content-menu";
 import type { Content } from "./types";
 
@@ -31,7 +32,10 @@ function BoardCard({ content, onEdit, onDelete }: { content: Content } & Pick<Bo
     <article className="rounded-card bg-surface p-4 shadow-[0_1px_2px_rgba(28,25,23,0.06)]">
       <div className="flex items-center justify-between gap-2">
         <TypeBadge type={content.type} />
-        <ContentMenu content={content} onEdit={() => onEdit(content)} onDelete={() => onDelete(content)} />
+        <span className="flex items-center gap-0.5">
+          {content.link && <ContentLink href={content.link} />}
+          <ContentMenu content={content} onEdit={() => onEdit(content)} onDelete={() => onDelete(content)} />
+        </span>
       </div>
       <button type="button" onClick={() => onEdit(content)} className="mt-2.5 block text-left text-[15px] font-bold hover:underline">
         {content.title}

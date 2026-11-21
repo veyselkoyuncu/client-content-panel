@@ -55,7 +55,13 @@ function ContentFormBody({ initial, contentId, onSaved, onSavingChange }: FormBo
 
     onSavingChange(true);
     save.mutate(
-      { ...values, title: values.title.trim(), body: values.body?.trim() || null, dueDate: values.dueDate || null },
+      {
+        ...values,
+        title: values.title.trim(),
+        body: values.body?.trim() || null,
+        link: values.link?.trim() || null,
+        dueDate: values.dueDate || null,
+      },
       { onSuccess: onSaved, onSettled: () => onSavingChange(false) },
     );
   }
@@ -125,6 +131,18 @@ function ContentFormBody({ initial, contentId, onSaved, onSavingChange }: FormBo
           <Input {...props} type="date" value={values.dueDate ?? ""} onChange={(e) => update("dueDate", e.target.value || null)} />
         )}
       </Field>
+      <Field label="Bağlantı" error={errors.link} hint="Yayın, taslak dosyası ya da önizleme adresi.">
+        {(props) => (
+          <Input
+            {...props}
+            type="url"
+            inputMode="url"
+            placeholder="https://"
+            value={values.link ?? ""}
+            onChange={(e) => update("link", e.target.value)}
+          />
+        )}
+      </Field>
       <Field label="Notlar / içerik metni" error={errors.body}>
         {(props) => (
           <Textarea
@@ -162,6 +180,7 @@ export function ContentFormDrawer({ open, contentId, defaults, onClose, onDelete
         status: existing.data.status,
         dueDate: existing.data.dueDate,
         body: existing.data.body ?? null,
+        link: existing.data.link,
       }
     : {
         clientId: defaults?.clientId ?? "",
@@ -170,6 +189,7 @@ export function ContentFormDrawer({ open, contentId, defaults, onClose, onDelete
         status: defaults?.status ?? "draft",
         dueDate: null,
         body: null,
+        link: null,
       };
 
   return (

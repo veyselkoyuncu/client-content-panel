@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { optionalText, searchQuery } from '../../shared/schemas.js';
+import { optionalText, optionalUrl, searchQuery } from '../../shared/schemas.js';
 import { CONTENT_STATUSES, CONTENT_TYPES } from './content.constants.js';
 
 const clientId = z.uuid({ error: 'Müşteri seçin.' });
@@ -24,11 +24,12 @@ export const createContentSchema = z.object({
   type,
   status: status.default('draft'),
   body: optionalText(10000),
+  link: optionalUrl(2048),
   dueDate,
 });
 
 export const updateContentSchema = z
-  .object({ clientId, title, type, status, body: optionalText(10000), dueDate })
+  .object({ clientId, title, type, status, body: optionalText(10000), link: optionalUrl(2048), dueDate })
   .partial();
 
 export const updateStatusSchema = z.object({ status });

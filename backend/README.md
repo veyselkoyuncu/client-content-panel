@@ -63,7 +63,7 @@ src/
 | `users` | Panele giriş yapan hesap yöneticileri |
 | `sessions` | Aktif oturumlar; cookie token'ının yalnızca SHA-256 hash'i saklanır |
 | `clients` | Ajansın çalıştığı markalar |
-| `contents` | İçerikler; her biri tek bir müşteriye bağlıdır (`ON DELETE RESTRICT`) |
+| `contents` | İçerikler; her biri tek bir müşteriye bağlıdır (`ON DELETE RESTRICT`). İsteğe bağlı teslim tarihi ve bağlantı (`link`, yalnızca http/https) içerir |
 
 İçerik `type`: `social_post`, `blog_post`, `web_page`, `other`
 İçerik `status`: `draft`, `in_review`, `published`

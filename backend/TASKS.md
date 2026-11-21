@@ -21,5 +21,5 @@
 ## Iteration 2
 - [x] CI: typecheck and tests against PostgreSQL on every pull request
 - [x] Contents list pagination: `page` and `pageSize` parameters with the total count in `meta`
-- [ ] Optional content link (`002_add_content_link` migration, validation, tests)
+- [x] Optional content link (`002_add_content_link` migration, validation, tests)
 - [ ] Refresh demo data before release

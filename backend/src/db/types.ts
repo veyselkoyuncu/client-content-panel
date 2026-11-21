@@ -41,6 +41,7 @@ export interface ContentsTable {
   type: ContentType;
   status: ColumnType<ContentStatus, ContentStatus | undefined, ContentStatus>;
   body: string | null;
+  link: string | null;
   dueDate: string | null;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;

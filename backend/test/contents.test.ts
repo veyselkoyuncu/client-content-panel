@@ -24,6 +24,25 @@ describe('contents', () => {
     });
   });
 
+  it('stores an optional http(s) link and clears it with null', async () => {
+    const client = await createClient('Link Müşterisi');
+    const invalid = await request('POST', '/api/contents', {
+      clientId: client.id,
+      title: 'Bağlantılı içerik',
+      type: 'web_page',
+      link: 'javascript:alert(1)',
+    });
+    expect(invalid.status).toBe(400);
+    expect(invalid.body.error.details[0].field).toBe('link');
+
+    const content = await createContent(client.id, { link: 'https://example.com/sayfa' });
+    const list = await request('GET', `/api/contents?clientId=${client.id}`);
+    expect(list.body.data[0].link).toBe('https://example.com/sayfa');
+
+    const cleared = await request('PATCH', `/api/contents/${content.id}`, { link: null });
+    expect(cleared.body.data.link).toBeNull();
+  });
+
   it('requires an existing client', async () => {
     const missing = await request('POST', '/api/contents', { title: 'Başlık', type: 'blog_post' });
     expect(missing.status).toBe(400);
