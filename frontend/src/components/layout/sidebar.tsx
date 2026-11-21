@@ -121,6 +121,16 @@ export function Sidebar({ collapsed = false, onToggle, onNavigate }: SidebarProp
           <LogOut className="size-4.5" />
         </button>
       </div>
+      {!collapsed && (
+        <a
+          href="https://lazyantlab.com"
+          target="_blank"
+          rel="noreferrer"
+          className="-mt-4 text-center text-[11px] text-subtle hover:text-ink"
+        >
+          by Lazy Ant Lab
+        </a>
+      )}
     </div>
   );
 }

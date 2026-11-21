@@ -36,7 +36,7 @@ function Footer() {
   return (
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-360 flex-wrap items-center justify-between gap-2 px-4 py-4 text-xs text-muted sm:px-10">
-        <span>akış · Müşteri ve İçerik Takip Paneli · v{version}</span>
+        <span>antflow · Müşteri ve İçerik Takip Paneli · v{version}</span>
         <ApiStatus />
       </div>
     </footer>

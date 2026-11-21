@@ -130,7 +130,7 @@ export function ClientDetail({ id }: { id: string }) {
   const clientName = client.data?.name;
 
   useEffect(() => {
-    if (clientName) document.title = `${clientName} · akış`;
+    if (clientName) document.title = `${clientName} · antflow`;
   }, [clientName]);
   const url = useUrlState();
   const [deleting, setDeleting] = useState(false);
