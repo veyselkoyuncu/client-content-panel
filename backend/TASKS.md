@@ -17,3 +17,9 @@
 - [x] Compose stack on the VM, Caddy site for `panel-api.lazyantlab.com`
 - [x] Migration and seed on the server, health check over HTTPS
 - [ ] CORS origin for the deployed frontend
+
+## Iteration 2
+- [x] CI: typecheck and tests against PostgreSQL on every pull request
+- [ ] Contents list pagination: `page` and `pageSize` parameters with the total count in `meta`
+- [ ] Optional content link (`002_add_content_link` migration, validation, tests)
+- [ ] Refresh demo data before release

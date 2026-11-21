@@ -54,6 +54,21 @@ src/
 - Comments only where the reason is not obvious from the code.
 - Never commit `.env` files or secrets.
 
+## Workflow
+
+- `main` only changes through pull requests; every change gets its own branch (`feat/…`, `fix/…`, `chore/…`).
+- A change is verified locally (`npm run typecheck`, `npm test`, and manually against the running API) before it is committed.
+- Pull requests must pass CI (typecheck and tests against PostgreSQL) before they are merged.
+- Schema changes ship as a new migration in the same pull request as the code that needs them.
+- After a merge that touches `backend/`, the API is redeployed on the VM.
+
 ## Deployment
 
 Docker Compose on a Linux VM (ARM64) behind Caddy at `https://panel-api.lazyantlab.com`. The API binds to `127.0.0.1:3002`; the database port is bound to loopback only.
+
+Redeploy after merging to `main` (migrations run automatically before the API starts):
+
+```
+cd ~/apps/client-content-panel && git pull --ff-only
+cd backend && docker compose up -d --build
+```
