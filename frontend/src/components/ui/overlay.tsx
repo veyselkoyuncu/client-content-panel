@@ -35,6 +35,30 @@ function useOverlayBehavior(open: boolean, onClose: () => void, containerRef: Re
   }, [open, onClose, containerRef]);
 }
 
+interface SheetProps {
+  open: boolean;
+  onClose: () => void;
+  label: string;
+  children: ReactNode;
+}
+
+export function LeftSheet({ open, onClose, label, children }: SheetProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isClient = useIsClient();
+  useOverlayBehavior(open, onClose, ref);
+  if (!open || !isClient) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex">
+      <div aria-hidden className="absolute inset-0 bg-ink/30" onClick={onClose} />
+      <div ref={ref} role="dialog" aria-modal="true" aria-label={label} className="relative h-full w-72 max-w-[85vw] shadow-2xl">
+        {children}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 interface OverlayProps {
   open: boolean;
   onClose: () => void;

@@ -34,12 +34,12 @@ function Headline({ name, inReview }: { name?: string; inReview?: number }) {
 function OverviewSkeleton() {
   return (
     <>
-      <div className="flex flex-col gap-3 lg:flex-row">
+      <div className="flex flex-col gap-3 xl:flex-row">
         {[0, 1, 2].map((key) => (
           <Skeleton key={key} className="h-59 flex-1 rounded-panel" />
         ))}
       </div>
-      <div className="grid gap-5 lg:grid-cols-[1.25fr_1fr]">
+      <div className="grid gap-5 xl:grid-cols-[1.25fr_1fr]">
         <Skeleton className="h-96 rounded-panel" />
         <Skeleton className="h-96 rounded-panel" />
       </div>
@@ -77,7 +77,7 @@ export function Overview() {
       ) : (
         <>
           <StatusFlow summary={summary.data} />
-          <div className="grid items-start gap-5 lg:grid-cols-[1.25fr_1fr]">
+          <div className="grid items-start gap-5 xl:grid-cols-[1.25fr_1fr]">
             <AttentionPanel items={summary.data.attention} />
             <ClientDistribution clients={clients.data} />
           </div>

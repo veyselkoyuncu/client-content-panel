@@ -88,8 +88,8 @@ export function ClientsShell({ children }: { children: ReactNode }) {
   const clients = useClients();
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
-      <aside className={cn("flex flex-col gap-4 lg:sticky lg:top-6", activeId && "max-lg:hidden")}>
+    <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)] xl:items-start">
+      <aside className={cn("flex flex-col gap-4 xl:sticky xl:top-6", activeId && "max-xl:hidden")}>
         <div className="flex items-center justify-between">
           <h1 className="text-[26px] font-extrabold tracking-tight">
             Müşteriler {clients.data && <span className="text-subtle">{clients.data.length}</span>}
@@ -100,7 +100,7 @@ export function ClientsShell({ children }: { children: ReactNode }) {
         </div>
         <ClientList activeId={activeId} />
       </aside>
-      <div className={cn("min-w-0", !activeId && "max-lg:hidden")}>{children}</div>
+      <div className={cn("min-w-0", !activeId && "max-xl:hidden")}>{children}</div>
       <ClientFormDrawer
         open={url.get("new") === "1"}
         onClose={() => url.set({ new: null })}

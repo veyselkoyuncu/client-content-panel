@@ -21,7 +21,7 @@ The API must be running (see `../backend/README.md`).
 src/
   app/                 routes only: login, (panel) layout and pages
   components/ui/       design-system primitives (button, badge, card, input, drawer, menu, states)
-  components/layout/   top navigation, page header
+  components/layout/   app shell: sidebar, mobile top bar, footer, page header
   features/<name>/     api hooks and screen components per domain: auth, dashboard, contents, clients
   lib/                 api client, labels, formatting, helpers
   proxy.ts             redirects to /login when there is no session cookie

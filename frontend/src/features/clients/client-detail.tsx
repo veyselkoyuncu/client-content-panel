@@ -157,7 +157,7 @@ export function ClientDetail({ id }: { id: string }) {
   const data = client.data;
   return (
     <div className="flex flex-col gap-5">
-      <Link href="/clients" className="flex items-center gap-1.5 text-sm font-bold text-muted lg:hidden">
+      <Link href="/clients" className="flex items-center gap-1.5 text-sm font-bold text-muted xl:hidden">
         <ArrowLeft className="size-4" /> Müşteriler
       </Link>
 
