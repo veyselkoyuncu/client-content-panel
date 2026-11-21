@@ -17,9 +17,9 @@
 
 ## Iteration 2
 - [x] CI: lint, typecheck and production build on every pull request
-- [ ] Collapsible sidebar as the main navigation (icon rail when collapsed) with client shortcuts
-- [ ] Mobile: compact sticky top bar with the sidebar as a drawer
-- [ ] Footer with app version and API status
+- [x] Collapsible sidebar as the main navigation (icon rail when collapsed) with client shortcuts
+- [x] Mobile: compact sticky top bar with the sidebar as a drawer
+- [x] Footer with app version and API status
 - [ ] Content type badges with distinct colors
 - [ ] Client filter: top clients as chips, the rest in a searchable popover
 - [ ] Board: limited cards per column with "show more"

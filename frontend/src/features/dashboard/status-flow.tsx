@@ -58,11 +58,11 @@ function StageCard({ status, summary }: { status: ContentStatus; summary: Dashbo
 
 export function StatusFlow({ summary }: { summary: DashboardSummary }) {
   return (
-    <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+    <div className="flex flex-col gap-3 xl:flex-row xl:items-stretch">
       {CONTENT_STATUSES.map((status, index) => (
         <Fragment key={status}>
           {index > 0 && (
-            <div aria-hidden className="hidden w-9 items-center justify-center text-subtle lg:flex">
+            <div aria-hidden className="hidden w-9 items-center justify-center text-subtle xl:flex">
               <ArrowRight className="size-5" />
             </div>
           )}
