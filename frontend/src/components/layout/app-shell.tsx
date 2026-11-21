@@ -71,7 +71,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen">
       <aside
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 border-r border-line transition-[width] duration-200 lg:block",
+          "sticky top-0 hidden h-screen shrink-0 border-r border-line transition-[width] duration-200 motion-reduce:transition-none lg:block",
           collapsed ? "w-19" : "w-66",
         )}
       >

@@ -30,16 +30,34 @@ export function Menu({ trigger, sections, align = "right" }: MenuProps) {
 
   useEffect(() => {
     if (!open) return;
-    const close = (event: MouseEvent | KeyboardEvent) => {
-      if (event instanceof KeyboardEvent ? event.key === "Escape" : !ref.current?.contains(event.target as Node)) {
-        setOpen(false);
-      }
+    const items = () => [...(ref.current?.querySelectorAll<HTMLElement>('[role^="menuitem"]') ?? [])];
+    items()[0]?.focus();
+
+    const closeAndRestore = () => {
+      setOpen(false);
+      ref.current?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
     };
-    document.addEventListener("mousedown", close);
-    document.addEventListener("keydown", close);
+    const onMouseDown = (event: MouseEvent) => {
+      if (!ref.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" || event.key === "Tab") {
+        if (event.key === "Escape") event.preventDefault();
+        closeAndRestore();
+        return;
+      }
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+      event.preventDefault();
+      const list = items();
+      const index = list.indexOf(document.activeElement as HTMLElement);
+      const next = event.key === "ArrowDown" ? index + 1 : index - 1;
+      list[(next + list.length) % list.length]?.focus();
+    };
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.removeEventListener("mousedown", close);
-      document.removeEventListener("keydown", close);
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("keydown", onKeyDown);
     };
   }, [open]);
 
@@ -69,6 +87,7 @@ export function Menu({ trigger, sections, align = "right" }: MenuProps) {
                   aria-checked={item.checked}
                   onClick={() => {
                     setOpen(false);
+                    ref.current?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
                     item.onSelect();
                   }}
                   className={cn(
