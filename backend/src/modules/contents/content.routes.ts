@@ -14,8 +14,8 @@ const NOT_FOUND = 'İçerik bulunamadı.';
 export const contentRoutes: FastifyPluginAsync = async (app) => {
   app.get('/contents', async (request) => {
     const query = parseInput(listContentsQuerySchema, request.query);
-    const { items, statusCounts } = await contentService.listContents(app.db, query);
-    return { data: items, meta: { total: items.length, statusCounts } };
+    const { items, meta } = await contentService.listContents(app.db, query);
+    return { data: items, meta };
   });
 
   app.post('/contents', async (request, reply) => {

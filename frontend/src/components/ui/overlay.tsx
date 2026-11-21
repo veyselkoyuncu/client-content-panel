@@ -1,19 +1,10 @@
 "use client";
 
 import { X } from "lucide-react";
-import { type ReactNode, useEffect, useId, useRef, useSyncExternalStore } from "react";
+import { type ReactNode, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/cn";
-
-const noopSubscribe = () => () => {};
-
-function useIsClient() {
-  return useSyncExternalStore(
-    noopSubscribe,
-    () => true,
-    () => false,
-  );
-}
+import { useIsClient } from "@/lib/use-is-client";
 
 function useOverlayBehavior(open: boolean, onClose: () => void, containerRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {

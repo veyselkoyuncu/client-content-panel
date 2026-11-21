@@ -10,6 +10,8 @@ export interface ContentFilters {
   clientId?: string;
   type?: ContentType;
   q?: string;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface ContentInput {
@@ -23,7 +25,7 @@ export interface ContentInput {
 
 interface ContentListResponse {
   data: Content[];
-  meta: { total: number; statusCounts: StatusCounts };
+  meta: { total: number; page?: number; pageSize?: number; statusCounts: StatusCounts };
 }
 
 export const contentKeys = {
@@ -35,7 +37,7 @@ export const contentKeys = {
 function toQuery(filters: ContentFilters) {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(filters)) {
-    if (value) params.set(key, value);
+    if (value) params.set(key, String(value));
   }
   const query = params.toString();
   return query ? `?${query}` : "";

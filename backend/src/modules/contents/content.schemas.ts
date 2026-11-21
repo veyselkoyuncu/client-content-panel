@@ -41,6 +41,13 @@ export const listContentsQuerySchema = z.object({
   type: type.optional(),
   q: searchQuery,
   sort: z.enum(CONTENT_SORTS, { error: 'Geçersiz sıralama.' }).default('-updatedAt'),
+  page: z.coerce.number({ error: 'Geçersiz sayfa.' }).int().min(1, { error: 'Geçersiz sayfa.' }).optional(),
+  pageSize: z.coerce
+    .number({ error: 'Geçersiz sayfa boyutu.' })
+    .int()
+    .min(1, { error: 'Geçersiz sayfa boyutu.' })
+    .max(100, { error: 'Sayfa boyutu en fazla 100 olabilir.' })
+    .default(20),
 });
 
 export type CreateContentInput = z.infer<typeof createContentSchema>;
