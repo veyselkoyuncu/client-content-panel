@@ -30,9 +30,9 @@
 - [x] Toast feedback for create, update, status change and delete
 
 ## Quality
-- [ ] Loading, empty and error states on every screen
-- [ ] Responsive layouts (mobile navigation, stacked panels, cards instead of tables)
-- [ ] Accessibility pass: keyboard navigation, focus states, labels
+- [x] Loading, empty and error states on every screen, 404 and error pages
+- [x] Responsive layouts (mobile navigation, stacked panels, cards instead of tables)
+- [x] Accessibility pass: keyboard navigation in menus, focus trap in panels, labels, reduced motion
 
 ## Release
 - [x] Vercel deployment with `API_URL`

@@ -3,7 +3,7 @@
 import { ArrowLeft, CalendarDays, Clock, FileText, Globe, Mail, MoreHorizontal, Pencil, Phone, Plus, Send, Trash2, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/ui/menu";
@@ -127,6 +127,11 @@ function ClientContents({ client, onCreate, onEdit, onDelete }: { client: Client
 
 export function ClientDetail({ id }: { id: string }) {
   const client = useClient(id);
+  const clientName = client.data?.name;
+
+  useEffect(() => {
+    if (clientName) document.title = `${clientName} · akış`;
+  }, [clientName]);
   const url = useUrlState();
   const [deleting, setDeleting] = useState(false);
   const [contentForm, setContentForm] = useState<{ open: boolean; id?: string }>({ open: false });
