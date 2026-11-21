@@ -6,6 +6,9 @@ import { Field, Input } from "@/components/ui/field";
 import { ApiError } from "@/lib/api";
 import { useLogin } from "./api";
 
+const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL;
+const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+
 export function LoginForm() {
   const login = useLogin();
   const [email, setEmail] = useState("");
@@ -53,6 +56,24 @@ export function LoginForm() {
       <Button type="submit" loading={login.isPending} className="mt-2 w-full justify-center">
         Giriş yap
       </Button>
+      {DEMO_EMAIL && DEMO_PASSWORD && (
+        <div className="mt-2 flex items-center gap-3 rounded-2xl border border-dashed border-line bg-surface/60 px-4 py-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-bold">Demo hesabı</p>
+            <p className="truncate text-xs text-muted">{DEMO_EMAIL}</p>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setEmail(DEMO_EMAIL);
+              setPassword(DEMO_PASSWORD);
+            }}
+          >
+            Bilgileri doldur
+          </Button>
+        </div>
+      )}
     </form>
   );
 }
