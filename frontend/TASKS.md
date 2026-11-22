@@ -47,4 +47,4 @@
 ## Release
 - [x] Vercel deployment with `API_URL`
 - [ ] Post-deploy checks against the live API
-- [ ] README
+- [x] README
