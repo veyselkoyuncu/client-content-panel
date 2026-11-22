@@ -37,7 +37,7 @@
 - [x] Activity page in the sidebar: all status changes with client and status filters, paginated
 - [x] Activity page: search by content title next to the client filter
 - [x] Drag and drop between board columns (desktop, keyboard accessible, only allowed target columns accept a drop)
-- [ ] Subtle animation on the login flow preview
+- [x] Subtle animation on the login flow preview: cards enter in sequence, an item travels draft → review → published, gets a check, and the next item follows in a loop (off with reduced motion)
 
 ## Quality
 - [x] Loading, empty and error states on every screen, 404 and error pages

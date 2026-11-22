@@ -1,48 +1,9 @@
-import { CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import { Logo } from "@/components/layout/logo";
-import { StatusDot } from "@/components/ui/status-badge";
+import { FlowPreview } from "@/features/auth/flow-preview";
 import { LoginForm } from "@/features/auth/login-form";
-import { cn } from "@/lib/cn";
-import { type ContentStatus, STATUS_LABELS, STATUS_STYLES } from "@/lib/labels";
 
 export const metadata: Metadata = { title: "Giriş" };
-
-const PREVIEW: Array<{ status: ContentStatus; count: number; title: string; meta: string }> = [
-  { status: "draft", count: 9, title: "Filtre kahve demleme rehberi", meta: "27 Kas" },
-  { status: "in_review", count: 8, title: "Kış menüsü lansmanı", meta: "Yarın" },
-  { status: "published", count: 12, title: "İmplant hizmet sayfası", meta: "18 Kas" },
-];
-
-function FlowPreview() {
-  return (
-    <div aria-hidden className="flex flex-col gap-2.5">
-      {PREVIEW.map((item, index) => (
-        <div
-          key={item.status}
-          className={cn(
-            "flex items-center gap-4 rounded-card p-4 shadow-[0_1px_2px_rgba(28,25,23,0.06)]",
-            STATUS_STYLES[item.status].panel,
-          )}
-          style={{ marginLeft: index * 28, marginRight: (PREVIEW.length - 1 - index) * 28 }}
-        >
-          <span className="w-14 text-[32px] leading-none font-extrabold tracking-tighter">{item.count}</span>
-          <div className="min-w-0 flex-1">
-            <p className="flex items-center gap-1.5 text-xs font-bold">
-              <StatusDot status={item.status} className="size-2" />
-              {STATUS_LABELS[item.status]}
-            </p>
-            <p className="mt-1 truncate rounded-lg bg-surface px-2.5 py-1.5 text-[13px] font-semibold">{item.title}</p>
-          </div>
-          <span className="flex items-center gap-1 text-xs text-muted">
-            <CalendarDays className="size-3.5" />
-            {item.meta}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 export default function LoginPage() {
   return (

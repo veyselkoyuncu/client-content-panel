@@ -34,6 +34,36 @@
   --color-danger: #b42318;
   --color-danger-bg: #fdecea;
 
+  --animate-rise: rise 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-chip-in: chip-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-tick: tick 360ms ease-out;
+  --animate-pop: pop 320ms cubic-bezier(0.3, 1.5, 0.6, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  @keyframes chip-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+  }
+  @keyframes tick {
+    from {
+      opacity: 0.35;
+      transform: translateY(4px);
+    }
+  }
+
   --radius-panel: 24px;
   --radius-card: 14px;
 }
