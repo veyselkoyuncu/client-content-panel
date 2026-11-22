@@ -1,6 +1,6 @@
 "use client";
 
-import { Columns3, History, Home, LogOut, PanelLeftClose, PanelLeftOpen, Plus, Users } from "lucide-react";
+import { CircleHelp, Columns3, History, Home, LogOut, PanelLeftClose, PanelLeftOpen, Plus, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
@@ -104,7 +104,18 @@ export function Sidebar({ collapsed = false, onToggle, onNavigate }: SidebarProp
         </div>
       )}
 
-      <div className={cn("mt-auto flex items-center gap-3 rounded-2xl bg-surface p-2.5", collapsed && "flex-col p-2")}>
+      <Link
+        href="/help"
+        onClick={onNavigate}
+        aria-current={isActive("/help") ? "page" : undefined}
+        title={collapsed ? "Nasıl kullanılır?" : undefined}
+        className={cn(itemClass(isActive("/help")), "mt-auto -mb-4")}
+      >
+        <CircleHelp className="size-4.5 shrink-0" />
+        {!collapsed && "Nasıl kullanılır?"}
+      </Link>
+
+      <div className={cn("flex items-center gap-3 rounded-2xl bg-surface p-2.5", collapsed && "flex-col p-2")}>
         {user ? <Avatar name={user.name} size={34} shape="circle" /> : <span className="size-8.5 rounded-full bg-sunken" />}
         {!collapsed && (
           <div className="min-w-0 flex-1">
