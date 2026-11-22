@@ -38,7 +38,7 @@ src/
 
 - Design tokens (colors, radii, font) are defined once in `app/globals.css` under `@theme`; components use the token classes, never raw hex values.
 - Status colors: draft → neutral, in_review → amber, published → green. Status is never shown by color alone; the label is always visible.
-- Only offer status changes the API allows (see `lib/transitions.ts`); published content is read-only with an unpublish action.
+- Only offer status changes the API allows (see `lib/transitions.ts`), in menus, the form and board drag and drop; published content is read-only with an unpublish action.
 - Labels for statuses and content types come from `lib/labels.ts`.
 - Every data view handles loading (skeleton), empty and error (with retry) states.
 - Forms show field errors from the API under the matching field and keep the submit button disabled while saving.
